@@ -56,9 +56,9 @@ void setupADC() {
 }
 
 void taskADC(){
+  updateIndex();
   readA0();
   readA1();
-  updateIndex();
 }
 
 void readA0() {
