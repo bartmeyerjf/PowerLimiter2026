@@ -16,6 +16,8 @@ int myFunction(int, int);
 
 // Setup code
 void setup() {
+  Serial.begin(115200);  // begin serial monitor
+  
   setupADC();
 
 

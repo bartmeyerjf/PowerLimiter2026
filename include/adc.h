@@ -13,81 +13,83 @@
 #include <Arduino.h>
 #include "pinconfig.h"
 
+// Moving average sample window
+#define N 256
+
+// Exponential average coeficient (from 0-255)
+#define alpha 4
+
 void setupADC();
 void taskADC();
-void readVoltage();
-void readCurrent();
+void updateIndex();
+void readA0();
+void readA1();
+//void readA2();
+//void readA3();
+//void readA4();
 
 
 // [====================================================]
 // [                 IMPLEMENTATION (.c)                ]
 // [====================================================]
 
-const int N = 500;
-int readings[N];
-int indexPos = 0;
-int sum = 0;
+// Mooving average parameters
+uint16_t indexPosition = 0;
+uint16_t readingsA0[N];
+uint32_t sumA0 = 0;
+uint32_t movAverageA0 = 0;
+uint32_t expAverageA0 = 0;
+uint16_t readingsA1[N];
+uint32_t sumA1 = 0;
+uint32_t movAverageA1 = 0;
+uint32_t expAverageA1 = 0;
 
 void setupADC() {
-  Serial.begin(115200);  // begin serial monitor
+  // Set attenuation 11dB -> 0-2.5V
   analogSetAttenuation(ADC_11db);
 
-
-  // Initialize readings with zeros
-  for (int i = 0; i < N; i++) {
-    readings[i] = 0;
+  // Initialize readingsA0 with zeros
+  for (uint16_t i = 0; i < N; i++) {
+    readingsA0[i] = 0;
+    readingsA1[i] = 0;
   }
 }
 
 void taskADC(){
-
-  readVoltage();
-  readCurrent();
-
+  readA0();
+  readA1();
+  updateIndex();
 }
 
-void readVoltage() {
-
-  int voltageReading = analogReadMilliVolts(analogReadPinVoltage);
-  sum = sum - readings[indexPos] + voltageReading;
-  readings[indexPos] = voltageReading;
-
-  // Update position
-  indexPos = (indexPos + 1) % N;
-
-  // Compute moving average
-  float voltageAverage = (float)sum/N;
-
-  // Print both last value and moving average
-  
-  Serial.print(" | Voltage average: ");
-  Serial.print(voltageAverage);
-  Serial.print("\t");
-  Serial.print(" | Voltage value: ");
-  Serial.println(voltageReading);
-
+void readA0() {
+  // remove oldest reading from sum
+  sumA0 = sumA0 - readingsA0[indexPosition];
+  // update readings array
+  readingsA0[indexPosition] = analogRead(A0);
+  // add new reading to sum
+  sumA0 = sumA0 + readingsA0[indexPosition];
+  // compute moving average
+  movAverageA0 = sumA0/N;
+  // compute exponential average
+  expAverageA0 = (readingsA0[indexPosition]*alpha + expAverageA0*(255-alpha))/255;
 }
 
-void readCurrent() {
+void readA1() {
+  // remove oldest reading from sum
+  sumA1 = sumA1 - readingsA1[indexPosition];
+  // update readings array
+  readingsA1[indexPosition] = analogRead(A1);
+  // add new reading to sum
+  sumA1 = sumA1 + readingsA1[indexPosition];
+  // compute moving average
+  movAverageA1 = sumA1/N;
+  // compute exponential average
+  expAverageA1 = (readingsA1[indexPosition]*alpha + expAverageA1*(255-alpha))/255;
+}
 
-  int currentReading = analogReadMilliVolts(analogReadPinCurrent);
-  sum = sum - readings[indexPos] + currentReading;
-  readings[indexPos] = currentReading;
-
-  // Update position
-  indexPos = (indexPos + 1) % N;
-
-  // Compute moving average
-  float currentAverage = (float)sum/N;
-
-  // Print both last value and moving average
-  
-  Serial.print(" | Current average: ");
-  Serial.print(currentAverage);
-  Serial.print("\t");
-  Serial.print(" | Current value: ");
-  Serial.println(currentReading);
-
+void updateIndex(){
+  // Update index position
+  indexPosition = (indexPosition + 1) % N;
 }
 
 // [====================================================]
