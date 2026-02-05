@@ -16,7 +16,7 @@
 // Moving average sample window
 #define N 256
 
-// Exponential average coeficient (from 0-255)
+// Exponential average coeficient (from 1-256)
 #define alpha 4
 
 void setupADC();
@@ -37,12 +37,12 @@ void readA1();
 uint16_t indexPosition = 0;
 uint16_t readingsA0[N];
 uint32_t sumA0 = 0;
-uint32_t movAverageA0 = 0;
-uint32_t expAverageA0 = 0;
+uint16_t movAverageA0 = 0;
+uint16_t expAverageA0 = 0;
 uint16_t readingsA1[N];
 uint32_t sumA1 = 0;
-uint32_t movAverageA1 = 0;
-uint32_t expAverageA1 = 0;
+uint16_t movAverageA1 = 0;
+uint16_t expAverageA1 = 0;
 
 void setupADC() {
   // Set attenuation 11dB -> 0-2.5V
@@ -84,7 +84,7 @@ void readA1() {
   // compute moving average
   movAverageA1 = sumA1/N;
   // compute exponential average
-  expAverageA1 = (readingsA1[indexPosition]*alpha + expAverageA1*(255-alpha))/255;
+  expAverageA1 = (readingsA1[indexPosition]*alpha + expAverageA1*(256-alpha))/256;
 }
 
 void updateIndex(){
