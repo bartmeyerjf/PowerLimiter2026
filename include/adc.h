@@ -17,7 +17,7 @@
 #define N 256
 
 // Exponential average coeficient (from 1-256)
-#define alpha 4
+#define alpha 16
 
 void setupADC();
 void taskADC();

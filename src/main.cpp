@@ -10,19 +10,15 @@
 #include <Arduino.h>
 #include "pinconfig.h"
 #include "adc.h"
-
-// Function declarations
-int myFunction(int, int);
+//#include "lut.h"
+#include "validation.h"
 
 // Setup code
 void setup() {
-  Serial.begin(115200);  // begin serial monitor
-  
   setupADC();
-
-
-
-  int result = myFunction(2, 3);
+  if(indexPosition == 0){
+    setupValidation();
+  }
 }
 
 // [====================================================]
@@ -31,11 +27,6 @@ void setup() {
 
 // Loop code
 void loop() {
-  //Serial.println("Working");
   taskADC();
-}
-
-// Function definitions
-int myFunction(int x, int y) {
-  return x + y;
+  taskValidation();
 }

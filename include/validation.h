@@ -30,6 +30,7 @@ void setupValidation() {
 void taskValidation(){
     printA0();
     printA1();
+    Serial.println();
 }
 
 void printHeader(){
@@ -40,18 +41,18 @@ void printHeader(){
 
 void printA0(){
     Serial.print(readingsA0[indexPosition]);
-    Serial.print(" \t | \t ");
+    Serial.print(" \t| MA0 ");
     Serial.print(movAverageA0);
-    Serial.print(" \t | \t ");
+    Serial.print(" \t | EA0 ");
     Serial.print(expAverageA0);
     Serial.print(" \t | \t ");
 }
 
 void printA1(){
     Serial.print(readingsA1[indexPosition]);
-    Serial.print(" \t | \t ");
+    Serial.print(" \t | MA1 ");
     Serial.print(movAverageA1);
-    Serial.print(" \t | \t ");
+    Serial.print(" \t | EA1 ");
     Serial.print(expAverageA1);
     Serial.print(" \t | \t ");
 }
