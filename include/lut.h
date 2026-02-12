@@ -54,6 +54,7 @@ void taskLUT(){
 } */
 
 void lutA0(uint16_t x){
+    // check if values are out of bound
     if(lutIndexA0>DIM0-2){
         lutIndexA0 = DIM0-2;
     } else if (lutIndexA0<0){
@@ -62,17 +63,17 @@ void lutA0(uint16_t x){
 
     if(x>=refMesurementA0[lutIndexA0+1]){
         lutIndexA0++;
-        lutPinVoltageA0 = refPinVoltageA0[DIM0-1];
-        lutSensorValueA0 = refSensorValueA0[DIM0-1];
+        lutPinVoltageA0 = refPinVoltageA0[lutIndexA0+1];
+        lutSensorValueA0 = refSensorValueA0[lutIndexA0+1];
     }
     else if(x<refMesurementA0[lutIndexA0]){
         lutIndexA0--;
         lutPinVoltageA0 = refPinVoltageA0[lutIndexA0];
         lutSensorValueA0 = refSensorValueA0[lutIndexA0];
-    } 
-
-    lutPinVoltageA0 = (refPinVoltageA0[lutIndexA0] + (refPinVoltageA0[lutIndexA0+1]-refPinVoltageA0[lutIndexA0])*(x-refMesurementA0[lutIndexA0])/(refMesurementA0[lutIndexA0+1]-refMesurementA0[lutIndexA0]));
-    lutSensorValueA0 = (refSensorValueA0[lutIndexA0] + (refSensorValueA0[lutIndexA0+1]-refSensorValueA0[lutIndexA0])*(x-refMesurementA0[lutIndexA0])/(refMesurementA0[lutIndexA0+1]-refMesurementA0[lutIndexA0]));
+    } else{
+        lutPinVoltageA0 = (refPinVoltageA0[lutIndexA0] + (refPinVoltageA0[lutIndexA0+1]-refPinVoltageA0[lutIndexA0])*(x-refMesurementA0[lutIndexA0])/(refMesurementA0[lutIndexA0+1]-refMesurementA0[lutIndexA0]));
+        lutSensorValueA0 = (refSensorValueA0[lutIndexA0] + (refSensorValueA0[lutIndexA0+1]-refSensorValueA0[lutIndexA0])*(x-refMesurementA0[lutIndexA0])/(refMesurementA0[lutIndexA0+1]-refMesurementA0[lutIndexA0]));
+    }
 }
 
 void lutA1(uint16_t x){
@@ -84,17 +85,17 @@ void lutA1(uint16_t x){
 
     if(x>=refMesurementA1[lutIndexA1+1]){
         lutIndexA1++;
-        lutPinVoltageA1 = refPinVoltageA1[DIM1-1];
-        lutSensorValueA1 = refSensorValueA1[DIM1-1];
+        lutPinVoltageA1 = refPinVoltageA1[lutIndexA1+1];
+        lutSensorValueA1 = refSensorValueA1[lutIndexA1+1];
     }
     else if(x<refMesurementA1[lutIndexA1]){
         lutIndexA1--;
         lutPinVoltageA1 = refPinVoltageA1[lutIndexA1];
         lutSensorValueA1 = refSensorValueA1[lutIndexA1];
-    } 
-
-    lutPinVoltageA1 = (refPinVoltageA1[lutIndexA1] + (refPinVoltageA1[lutIndexA1+1]-refPinVoltageA1[lutIndexA1])*(x-refMesurementA1[lutIndexA1])/(refMesurementA1[lutIndexA1+1]-refMesurementA1[lutIndexA1]));
-    lutSensorValueA1 = (refSensorValueA1[lutIndexA1] + (refSensorValueA1[lutIndexA1+1]-refSensorValueA1[lutIndexA1])*(x-refMesurementA1[lutIndexA1])/(refMesurementA1[lutIndexA1+1]-refMesurementA1[lutIndexA1]));
+    } else{
+        lutPinVoltageA1 = (refPinVoltageA1[lutIndexA1] + (refPinVoltageA1[lutIndexA1+1]-refPinVoltageA1[lutIndexA1])*(x-refMesurementA1[lutIndexA1])/(refMesurementA1[lutIndexA1+1]-refMesurementA1[lutIndexA1]));
+        lutSensorValueA1 = (refSensorValueA1[lutIndexA1] + (refSensorValueA1[lutIndexA1+1]-refSensorValueA1[lutIndexA1])*(x-refMesurementA1[lutIndexA1])/(refMesurementA1[lutIndexA1+1]-refMesurementA1[lutIndexA1]));
+    }
 }
 
 

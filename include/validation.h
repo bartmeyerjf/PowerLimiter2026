@@ -13,6 +13,7 @@
 #include <Arduino.h>
 #include "pinconfig.h"
 #include "adc.h"
+#include "lut.h"
 
 void printHeader();
 void printA0();
@@ -34,8 +35,8 @@ void taskValidation(){
 }
 
 void printHeader(){
-    Serial.print("Reading A0 \t | \t Mov Avg A0 \t | \t Exp Avg A0 \t | \t ");
-    Serial.print("Reading A1 \t | \t Mov Avg A1 \t | \t Exp Avg A1 \t | \t ");
+    Serial.print("Reading A0 \t | \t Mov Avg A0 \t | \t Pin (V) A0 \t | \t ");
+    Serial.print("Reading A1 \t | \t Mov Avg A1 \t | \t Pin (V) A1 \t | \t ");
     Serial.println();
 }
 
@@ -43,8 +44,8 @@ void printA0(){
     Serial.print(readingsA0[indexPosition]);
     Serial.print(" \t| MA0 ");
     Serial.print(movAverageA0);
-    Serial.print(" \t | EA0 ");
-    Serial.print(expAverageA0);
+    Serial.print(" \t | VA0 ");
+    Serial.print(lutPinVoltageA0);
     Serial.print(" \t | \t ");
 }
 
@@ -52,8 +53,8 @@ void printA1(){
     Serial.print(readingsA1[indexPosition]);
     Serial.print(" \t | MA1 ");
     Serial.print(movAverageA1);
-    Serial.print(" \t | EA1 ");
-    Serial.print(expAverageA1);
+    Serial.print(" \t | VA1 ");
+    Serial.print(lutPinVoltageA1);
     Serial.print(" \t | \t ");
 }
 
