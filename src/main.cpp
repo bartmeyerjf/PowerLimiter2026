@@ -10,7 +10,7 @@
 #include <Arduino.h>
 #include "pinconfig.h"
 #include "adc.h"
-//#include "lut.h"
+#include "lut.h"
 #include "validation.h"
 
 // Setup code
@@ -28,5 +28,6 @@ void setup() {
 // Loop code
 void loop() {
   taskADC();
+  taskLUT();
   taskValidation();
 }
