@@ -13,12 +13,11 @@
 #include "lut.h"
 #include "validation.h"
 
+// Test sync
 // Setup code
 void setup() {
   setupADC();
-  if(indexPosition == 0){
-    setupValidation();
-  }
+  setupValidation();
 }
 
 // [====================================================]
