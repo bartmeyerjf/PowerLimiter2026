@@ -29,12 +29,14 @@ void setupValidation() {
 }
 
 void taskValidation(){
+    Serial.print(micros());
     printA0();
     printA1();
     Serial.println();
 }
 
 void printHeader(){
+    Serial.print("Time (us)  \t | \t ");
     Serial.print("Reading A0 \t | \t Mov Avg A0 \t | \t Pin (V) A0 \t | \t ");
     Serial.print("Reading A1 \t | \t Mov Avg A1 \t | \t Pin (V) A1 \t | \t ");
     Serial.println();
