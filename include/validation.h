@@ -11,6 +11,7 @@
 // [====================================================]
 
 #include <Arduino.h>
+#include <stdlib.h>
 #include "pinconfig.h"
 #include "adc.h"
 #include "lut.h"
@@ -25,14 +26,21 @@ void printA1();
 
 void setupValidation() {
     Serial.begin(115200);  // begin serial monitor
-    printHeader();
+    //printHeader();
 }
 
 void taskValidation(){
+
+    if(abs(prevMovAverageA0-movAverageA0)>4 || abs(prevMovAverageA1-movAverageA1)>4){
     Serial.print(micros());
+    Serial.print("\t | \t ");
+    Serial.print(indexPosition);
+    Serial.print("\t | \t ");
     printA0();
     printA1();
     Serial.println();
+    }
+
 }
 
 void printHeader(){
@@ -46,18 +54,18 @@ void printA0(){
     Serial.print(readingsA0[indexPosition]);
     Serial.print(" \t| MA0 ");
     Serial.print(movAverageA0);
-    Serial.print(" \t | VA0 ");
-    Serial.print(lutPinVoltageA0);
-    Serial.print(" \t | \t ");
+    //Serial.print(" \t | VA0 ");
+    //Serial.print(lutPinVoltageA0);
+    Serial.print(" \t ");
 }
 
 void printA1(){
     Serial.print(readingsA1[indexPosition]);
     Serial.print(" \t | MA1 ");
     Serial.print(movAverageA1);
-    Serial.print(" \t | VA1 ");
-    Serial.print(lutPinVoltageA1);
-    Serial.print(" \t | \t ");
+    //Serial.print(" \t | VA1 ");
+    //Serial.print(lutPinVoltageA1);
+    Serial.print(" \t ");
 }
 
 // [====================================================]

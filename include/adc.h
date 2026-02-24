@@ -38,10 +38,12 @@ uint16_t indexPosition = 0;
 uint16_t readingsA0[N];
 uint32_t sumA0 = 0;
 uint16_t movAverageA0 = 0;
+uint16_t prevMovAverageA0 = 0;
 //uint16_t expAverageA0 = 0;
 uint16_t readingsA1[N];
 uint32_t sumA1 = 0;
 uint16_t movAverageA1 = 0;
+uint16_t prevMovAverageA1 = 0;
 //uint16_t expAverageA1 = 0;
 
 void setupADC() {
@@ -69,6 +71,7 @@ void readA0() {
   // add new reading to sum
   sumA0 = sumA0 + readingsA0[indexPosition];
   // compute moving average
+  prevMovAverageA0 = movAverageA0;
   movAverageA0 = sumA0/N;
   // compute exponential average
   //expAverageA0 = (readingsA0[indexPosition]*alpha + expAverageA0*(255-alpha))/255;
@@ -82,6 +85,7 @@ void readA1() {
   // add new reading to sum
   sumA1 = sumA1 + readingsA1[indexPosition];
   // compute moving average
+  prevMovAverageA1 = movAverageA1;
   movAverageA1 = sumA1/N;
   // compute exponential average
   //expAverageA1 = (readingsA1[indexPosition]*alpha + expAverageA1*(256-alpha))/256;
