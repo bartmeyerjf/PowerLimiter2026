@@ -13,44 +13,51 @@
 #include <Arduino.h>
 #include "pinconfig.h"
 
-// Moving average sample window
-#define N 256
+// ADC buffer (1000 samples)
+#define BUFFER_SIZE 1000
 
-// Exponential average coeficient (from 1-256)
-#define alpha 16
+// Moving average sample window
+#define N 100
 
 void setupADC();
 void taskADC();
+void adcRead();
 void updateIndex();
 void readA0();
 void readA1();
-//void readA2();
-//void readA3();
-//void readA4();
-
 
 // [====================================================]
 // [                 IMPLEMENTATION (.c)                ]
 // [====================================================]
 
+// Buffers
+uint16_t bufferA0_0[BUFFER_SIZE];
+uint16_t bufferA0_1[BUFFER_SIZE];
+uint16_t bufferA1_0[BUFFER_SIZE];
+uint16_t bufferA1_1[BUFFER_SIZE];
+
+volatile uint16_t bufferIndex = 0; 
+volatile bool activeBuffer = 0; 
+volatile bool isBufferReady = false;
+
 // Mooving average parameters
-uint16_t indexPosition = 0;
+uint16_t indexMovAvg = 0;
+
 uint16_t readingsA0[N];
 uint32_t sumA0 = 0;
 uint16_t movAverageA0 = 0;
 uint16_t prevMovAverageA0 = 0;
-//uint16_t expAverageA0 = 0;
+
 uint16_t readingsA1[N];
 uint32_t sumA1 = 0;
 uint16_t movAverageA1 = 0;
 uint16_t prevMovAverageA1 = 0;
-//uint16_t expAverageA1 = 0;
 
 void setupADC() {
   // Set attenuation 11dB -> 0-2.5V
   analogSetAttenuation(ADC_11db);
 
-  // Initialize readingsA0 with zeros
+  // Initialize readings arrays with zeros
   for (uint16_t i = 0; i < N; i++) {
     readingsA0[i] = 0;
     readingsA1[i] = 0;
@@ -63,37 +70,51 @@ void taskADC(){
   readA1();
 }
 
+void adcRead() {
+  if (activeBuffer == 1) {
+    bufferA0_1[bufferIndex] = analogRead(A0);
+    bufferA1_1[bufferIndex] = analogRead(A1);
+  } else {
+    bufferA0_0[bufferIndex] = analogRead(A0);
+    bufferA1_0[bufferIndex] = analogRead(A1);
+  }
+
+  bufferIndex ++;
+  if (bufferIndex >= BUFFER_SIZE) {
+    bufferIndex = 0;
+    activeBuffer = !(activeBuffer);
+    isBufferReady = true; // Tell main loop to write to SD
+  }
+
+}
+
 void readA0() {
   // remove oldest reading from sum
-  sumA0 = sumA0 - readingsA0[indexPosition];
+  sumA0 = sumA0 - readingsA0[indexMovAvg];
   // update readings array
-  readingsA0[indexPosition] = analogRead(A0);
+  readingsA0[indexMovAvg] = analogRead(A0);
   // add new reading to sum
-  sumA0 = sumA0 + readingsA0[indexPosition];
+  sumA0 = sumA0 + readingsA0[indexMovAvg];
   // compute moving average
   prevMovAverageA0 = movAverageA0;
   movAverageA0 = sumA0/N;
-  // compute exponential average
-  //expAverageA0 = (readingsA0[indexPosition]*alpha + expAverageA0*(255-alpha))/255;
 }
 
 void readA1() {
   // remove oldest reading from sum
-  sumA1 = sumA1 - readingsA1[indexPosition];
+  sumA1 = sumA1 - readingsA1[indexMovAvg];
   // update readings array
-  readingsA1[indexPosition] = analogRead(A1);
+  readingsA1[indexMovAvg] = analogRead(A1);
   // add new reading to sum
-  sumA1 = sumA1 + readingsA1[indexPosition];
+  sumA1 = sumA1 + readingsA1[indexMovAvg];
   // compute moving average
   prevMovAverageA1 = movAverageA1;
   movAverageA1 = sumA1/N;
-  // compute exponential average
-  //expAverageA1 = (readingsA1[indexPosition]*alpha + expAverageA1*(256-alpha))/256;
 }
 
 void updateIndex(){
   // Update index position
-  indexPosition = (indexPosition + 1) % N;
+  indexMovAvg = (indexMovAvg + 1) % N;
 }
 
 // [====================================================]
