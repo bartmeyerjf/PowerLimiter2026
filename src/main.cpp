@@ -14,7 +14,8 @@
 
 #include "pinconfig.h"
 #include "adc.h"
-#include "pwm.h"
+#include "datalog.h"
+//#include "pwm.h"
 
 //#include "lut.h"
 //#include "validation.h"
@@ -31,8 +32,15 @@ void setup() {
   WiFi.mode(WIFI_OFF);
   btStop();
 
+  // Timer Setup (1kHz -> 1000 us)
+  timer = timerBegin(0, 80, true); // prescaler 80 -> 1000 us
+  timerAttachInterrupt(timer, &onTimer, true);
+  timerAlarmWrite(timer, 1000, true);
+  timerAlarmEnable(timer);
+
   setupADC();
-  setupPWM();
+  setupDataLog();
+  //setupPWM();
 
 }
 
@@ -42,12 +50,10 @@ void setup() {
 
 // Loop code
 void loop() {
-  vTaskDelete(NULL); 
+  taskDataLog();
+  //vTaskDelete(NULL); 
 }
 
 void IRAM_ATTR onTimer(){
-  Serial.print(micros());
-  Serial.print(", ");
   adcRead();
-  Serial.println();
 }
