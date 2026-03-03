@@ -8,6 +8,10 @@
 
 // Include
 #include <Arduino.h>
+#include <SPI.h>
+#include <SD.h>
+#include <WiFi.h>
+
 #include "pinconfig.h"
 #include "adc.h"
 #include "lut.h"
@@ -37,11 +41,11 @@ void setup() {
 
 // Loop code
 void loop() {
-  taskADC();
-  taskLUT();
-  taskValidation();
 }
 
 void IRAM_ATTR onTimer(){
+  Serial.print(micros());
+  Serial.print(", ");
   adcRead();
+  Serial.println();
 }
