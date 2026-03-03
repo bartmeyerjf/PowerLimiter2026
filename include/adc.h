@@ -30,6 +30,7 @@ uint16_t bufferA1_0[BUFFER_SIZE];
 uint16_t bufferA1_1[BUFFER_SIZE];
 uint32_t timeStamp_0[BUFFER_SIZE];
 uint32_t timeStamp_1[BUFFER_SIZE];
+uint16_t dutyCycle[BUFFER_SIZE];
 
 volatile uint16_t bufferIndex = 0; 
 volatile bool activeBuffer = 0; 
@@ -47,6 +48,7 @@ void setupADC() {
     bufferA1_1[i] = 0;
     timeStamp_0[i] = 0;
     timeStamp_1[i] = 0;
+    dutyCycle[i] = 0;
   }
 }
 
@@ -56,10 +58,12 @@ void adcRead() {
     bufferA0_1[bufferIndex] = analogRead(A0);
     bufferA1_1[bufferIndex] = analogRead(A1);
     timeStamp_0[bufferIndex] = micros();
+    dutyCycle[bufferIndex] = (uint16_t)(duty*4095);
   } else {
     bufferA0_0[bufferIndex] = analogRead(A0);
     bufferA1_0[bufferIndex] = analogRead(A1);
     timeStamp_0[bufferIndex] = micros();
+    dutyCycle[bufferIndex] = (uint16_t)(duty*4095);
   }
 
   // Update index and flag when buffer is full

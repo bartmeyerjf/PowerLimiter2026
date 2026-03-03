@@ -15,7 +15,8 @@
 #include "pinconfig.h"
 #include "adc.h"
 #include "datalog.h"
-//#include "pwm.h"
+
+#include "pwm.h"
 
 //#include "lut.h"
 //#include "validation.h"
@@ -39,6 +40,7 @@ void setup() {
   timerAlarmEnable(timer);
 
   setupADC();
+  setupPWM();
   setupDataLog();
   //setupPWM();
 
@@ -50,8 +52,8 @@ void setup() {
 
 // Loop code
 void loop() {
+  taskPWM();
   taskDataLog();
-  //vTaskDelete(NULL); 
 }
 
 void IRAM_ATTR onTimer(){
