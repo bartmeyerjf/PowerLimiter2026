@@ -18,7 +18,6 @@
 
 void setupADC();
 void adcRead();
-void taskADC();
 
 // [====================================================]
 // [                 IMPLEMENTATION (.c)                ]
@@ -35,6 +34,12 @@ volatile bool activeBuffer = 0;
 volatile bool isBufferReady = false;
 
 void setupADC() {
+  // Timer Setup (1kHz -> 1000 us)
+  timer = timerBegin(0, 80, true); // prescaler 80 -> 1000 us
+  timerAttachInterrupt(timer, &onTimer, true);
+  timerAlarmWrite(timer, 1000, true);
+  timerAlarmEnable(timer);
+
   // Set attenuation 11dB -> 0-2.8V
   analogSetAttenuation(ADC_11db);
 

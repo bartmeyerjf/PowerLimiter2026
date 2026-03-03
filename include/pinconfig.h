@@ -12,6 +12,7 @@
 
 #define analogReadPinVoltage A0
 #define analogReadPinCurrent A1
+#define PIN_PWM_IN 8
 
 // [====================================================]
 // Close multiple inclusions lock
