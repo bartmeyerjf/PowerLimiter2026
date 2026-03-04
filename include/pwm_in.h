@@ -1,13 +1,13 @@
 // ------------------------------------------------------
-// PWM Reading Library
+// PWM Input Library
 // ------------------------------------------------------
 
 // [====================================================]
 // [                    HEADER (.h)                     ]
 // [====================================================]
 // Multiple inclusions lock
-#ifndef pwm_h
-#define pwm_h
+#ifndef pwm_in_h
+#define pwm_in_h
 // [====================================================]
 
 #include <Arduino.h>
@@ -21,12 +21,12 @@ const rmt_channel_t RMT_RX_CHANNEL = RMT_CHANNEL_0;
 volatile uint32_t high_duration = 0;
 volatile uint32_t low_duration = 0;
 volatile uint32_t period = 0;
-volatile float duty = 0;
+volatile float pwmInDuty = 0;
 
-void setupPWM();
-void taskPWM();
+void setupPWMIn();
+void taskPWMIn();
 
-void setupPWM(){
+void setupPWMIn(){
     rmt_config_t rmt_rx;
     rmt_rx.channel = RMT_RX_CHANNEL;
     rmt_rx.gpio_num = (gpio_num_t)PIN_PWM_IN;
@@ -48,7 +48,7 @@ void setupPWM(){
 // [               IMPLEMENTATION (.c)                  ]
 // [====================================================]
 
-void taskPWM(){
+void taskPWMIn(){
 
     size_t rx_size = 0;
 
@@ -81,8 +81,7 @@ void taskPWM(){
       // Calculate Results
       period = high_duration + low_duration;
       if (period > 0) {
-        duty = (high_duration / (float)period);   
-        // Serial.printf("Duty: %.2f%% | High: %d us | Low: %d us\n", duty, high_duration, low_duration);
+        pwmInDuty = (high_duration / (float)period);   
       } 
       
       // Clean up the ring buffer memory using the handle variable

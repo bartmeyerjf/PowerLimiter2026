@@ -23,6 +23,9 @@
 // PWM input pin
 #define PIN_PWM_IN 8
 
+// PWM input pin
+#define PIN_PWM_OUT 10
+
 // [====================================================]
 // Close multiple inclusions lock
 #endif  

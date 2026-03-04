@@ -16,7 +16,8 @@
 #include "adc.h"
 #include "datalog.h"
 
-#include "pwm.h"
+#include "pwm_in.h"
+#include "pwm_out.h"
 
 //#include "lut.h"
 //#include "validation.h"
@@ -26,10 +27,11 @@ void IRAM_ATTR onTimer();
 // Timer Interrupt
 hw_timer_t *timer = NULL;
 
-// Test sync
 // Setup code
 void setup() {
+  // Start serial monitor
   Serial.begin(460800);
+  // Turn off wifi and bluetooth
   WiFi.mode(WIFI_OFF);
   btStop();
 
@@ -39,8 +41,9 @@ void setup() {
   timerAlarmWrite(timer, 1000, true);
   timerAlarmEnable(timer);
 
+  // Setup libraries
   setupADC();
-  setupPWM();
+  setupPWMIn();
   setupDataLog();
   //setupPWM();
 
@@ -52,10 +55,14 @@ void setup() {
 
 // Loop code
 void loop() {
-  taskPWM();
+  taskPWMIn();
   taskDataLog();
+
+  // Set pwm out to be the same as pwm in
+  setPWMOutput(pwmInDuty);
 }
 
+// Interrupt code
 void IRAM_ATTR onTimer(){
   adcRead();
 }
