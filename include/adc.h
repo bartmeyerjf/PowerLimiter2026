@@ -59,7 +59,7 @@ void adcRead() {
   if (activeBuffer == 1) {
     bufferA0_1[bufferIndex] = analogRead(A0);
     bufferA1_1[bufferIndex] = analogRead(A1);
-    timeStamp_0[bufferIndex] = micros();
+    timeStamp_1[bufferIndex] = micros();
     dutyCycle[bufferIndex] = (uint16_t)(pwmInDuty*4095.0f);
   } else {
     bufferA0_0[bufferIndex] = analogRead(A0);

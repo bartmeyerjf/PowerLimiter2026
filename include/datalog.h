@@ -54,7 +54,7 @@ void taskDataLog(){
         for (int i = 0; i < BUFFER_SIZE; i++) {
             // Write to SD
             dataFile.print(dutyLog[i]);
-            Serial.print(",");
+            dataFile.print(",");
             dataFile.print(timeStamp[i]);
             dataFile.print(",");
             dataFile.print(b0[i]);
