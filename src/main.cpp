@@ -44,9 +44,8 @@ void setup() {
   // Setup libraries
   setupADC();
   setupPWMIn();
+  setupPWMOut();
   setupDataLog();
-  //setupPWM();
-
 }
 
 // [====================================================]
@@ -57,12 +56,12 @@ void setup() {
 void loop() {
   taskPWMIn();
   taskDataLog();
-
   // Set pwm out to be the same as pwm in
-  setPWMOutput(pwmInDuty);
+  setPWMOutput(0.10);
+
 }
 
-// Interrupt code
+// 1 kHz interrupt code
 void IRAM_ATTR onTimer(){
   adcRead();
 }

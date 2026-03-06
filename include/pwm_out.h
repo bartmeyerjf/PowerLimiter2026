@@ -13,7 +13,7 @@
 #include "pinconfig.h"
 
 // Configuration Constants
-const float PWM_FREQ = 73.53;
+const float PWM_FREQ = 73;
 const uint8_t  PWM_RES = 12;   // 12-bit resolution (0-4095)
 const uint8_t  PWM_CHAN = 0;   // LEDC Channel 0
 
