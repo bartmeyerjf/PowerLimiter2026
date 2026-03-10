@@ -8,58 +8,74 @@
 // Multiple inclusions lock
 #ifndef pwm_in_h
 #define pwm_in_h
-// [====================================================]
 
 #include <Arduino.h>
 #include "pinconfig.h"
-
+#include "driver/gpio.h"
 #include "esp_intr_alloc.h"
-#include "esp_attr.h"
+#include "soc/gpio_struct.h"
+#include "soc/interrupts.h"   // Correct header for Core 3.x / ESP-IDF 5.x
 
 volatile uint32_t pwmInHighTime_us = 0;
 volatile uint32_t pwmInPeriod_us = 0;
 volatile uint32_t pwmInLastRiseEdgeInstant = 0;
-volatile uint32_t pwmInTime = 0;
-//volatile bool pwmInUpdate = false;
 
 volatile float pwmInDuty = 0;
 volatile uint32_t pwmInFreq = 0;
 
-void setupPWMIn();
-void taskPWMIn();
+// HIGH PRIORITY ISR
+void IRAM_ATTR PWMInterrupt(void* arg) {
+    // Accessing the .val member is required in Core 3.x
+    uint32_t gpio_intr_status = GPIO.status.val;
+    
+    // Clear the interrupt status
+    GPIO.status_w1tc.val = gpio_intr_status;
 
-void IRAM_ATTR PWMInterrupt() {
-    pwmInTime = micros();
-      if (digitalRead(PIN_PWM_IN) == HIGH) {
-        // RISING EDGE
-        pwmInPeriod_us = pwmInTime - pwmInLastRiseEdgeInstant;
-        pwmInLastRiseEdgeInstant = pwmInTime;
-    } else {
-        // FALLING EDGE
-        pwmInHighTime_us = pwmInTime - pwmInLastRiseEdgeInstant;
+    if (gpio_intr_status & (1ULL << PIN_PWM_IN)) {
+        uint32_t pwmInTime = micros();
+        
+        if (digitalRead(PIN_PWM_IN) == HIGH) {
+            // RISING EDGE
+            pwmInPeriod_us = pwmInTime - pwmInLastRiseEdgeInstant;
+            pwmInLastRiseEdgeInstant = pwmInTime;
+        } else {
+            // FALLING EDGE
+            pwmInHighTime_us = pwmInTime - pwmInLastRiseEdgeInstant;
+        }
     }
 }
 
-void setupPWMIn(){
+void setupPWMIn() {
+    // Initialize GPIO
+    gpio_config_t io_conf = {};
+    io_conf.intr_type = GPIO_INTR_ANYEDGE;
+    io_conf.mode = GPIO_MODE_INPUT;
+    io_conf.pin_bit_mask = (1ULL << PIN_PWM_IN);
+    io_conf.pull_down_en = GPIO_PULLDOWN_ENABLE;
+    io_conf.pull_up_en = GPIO_PULLUP_DISABLE;
+    gpio_config(&io_conf);
 
-    pinMode(PIN_PWM_IN, INPUT_PULLDOWN); 
-    // Trigger on CHANGE so we see both Rising and Falling edges
-    attachInterrupt(digitalPinToInterrupt(PIN_PWM_IN), PWMInterrupt, CHANGE);
-
+    // Allocate Interrupt with Level 3 Priority
+    // ETS_GPIO_INTR_SOURCE is found in soc/interrupts.h
+    esp_intr_alloc(ETS_GPIO_INTR_SOURCE, 
+                   ESP_INTR_FLAG_LEVEL3 | ESP_INTR_FLAG_IRAM, 
+                   PWMInterrupt, 
+                   NULL, 
+                   NULL);
 }
 
+void taskPWMIn() {
+    uint32_t localHigh, localPeriod;
 
-// [====================================================]
-// [               IMPLEMENTATION (.c)                  ]
-// [====================================================]
+    noInterrupts();
+    localHigh = pwmInHighTime_us;
+    localPeriod = pwmInPeriod_us;
+    interrupts();
 
-void taskPWMIn(){
-  pwmInDuty = (float)pwmInHighTime_us/(float)pwmInPeriod_us;
-  pwmInFreq = 1000000/(float)pwmInPeriod_us;
-
+    if (localPeriod > 0) {
+        pwmInDuty = (float)localHigh / (float)localPeriod;
+        pwmInFreq = 1000000 / localPeriod;
+    }
 }
 
-// [====================================================]
-// Close multiple inclusions lock
-#endif  
-// [====================================================]
+#endif

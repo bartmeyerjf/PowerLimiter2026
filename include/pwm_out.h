@@ -20,7 +20,7 @@
 #define LEDC_OUTPUT_IO          (PIN_PWM_OUT) // Define the output GPIO
 #define LEDC_CHANNEL            LEDC_CHANNEL_0
 #define LEDC_DUTY_RES           LEDC_TIMER_12_BIT // Set duty resolution to 12 bits
-#define LEDC_FREQUENCY          (75.3) // Frequency in Hertz
+#define LEDC_FREQUENCY          (75) // Frequency in Hertz
 #define LEDC_DUTY               (0) // Set duty to 0%. Range: 0 - 4095
 
 
