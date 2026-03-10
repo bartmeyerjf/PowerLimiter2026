@@ -9,33 +9,52 @@
 #ifndef pwm_out_h
 #define pwm_out_h
 
-#include <Arduino.h>
+//#include <Arduino.h>
+//#include <stdio.h>
+#include "driver/ledc.h"
+#include "esp_err.h"
 #include "pinconfig.h"
 
-// Configuration Constants
-const float PWM_FREQ = 73;
-const uint8_t  PWM_RES = 12;   // 12-bit resolution (0-4095)
-const uint8_t  PWM_CHAN = 0;   // LEDC Channel 0
+#define LEDC_TIMER              LEDC_TIMER_0
+#define LEDC_MODE               LEDC_LOW_SPEED_MODE
+#define LEDC_OUTPUT_IO          (PIN_PWM_OUT) // Define the output GPIO
+#define LEDC_CHANNEL            LEDC_CHANNEL_0
+#define LEDC_DUTY_RES           LEDC_TIMER_12_BIT // Set duty resolution to 12 bits
+#define LEDC_FREQUENCY          (75.3) // Frequency in Hertz
+#define LEDC_DUTY               (0) // Set duty to 0%. Range: 0 - 4095
+
 
 //Initializes the Hardware PWM Output
 void setupPWMOut() {
-    // Board manager version (2.x)
-    // Configure timer channel (Channel, Frequency, Resolution)
-    ledcSetup(PWM_CHAN, PWM_FREQ, PWM_RES);
-    // Attach GPIO pin to configured channel
-    ledcAttachPin(PIN_PWM_OUT, PWM_CHAN);
+    // Prepare and then apply the LEDC PWM timer configuration
+    ledc_timer_config_t ledc_timer = {
+        .speed_mode       = LEDC_MODE,
+        .duty_resolution  = LEDC_DUTY_RES,
+        .timer_num        = LEDC_TIMER,
+        .freq_hz          = LEDC_FREQUENCY,  // Set output frequency at 4 kHz
+        .clk_cfg          = LEDC_AUTO_CLK
+    };
+    ESP_ERROR_CHECK(ledc_timer_config(&ledc_timer));
+
+    // Prepare and then apply the LEDC PWM channel configuration
+    ledc_channel_config_t ledc_channel = {
+        .gpio_num       = LEDC_OUTPUT_IO,
+        .speed_mode     = LEDC_MODE,
+        .channel        = LEDC_CHANNEL,
+        .intr_type      = LEDC_INTR_DISABLE,
+        .timer_sel      = LEDC_TIMER,
+        .duty           = 0, // Set duty to 0%
+        .hpoint         = 0
+    };
+    ESP_ERROR_CHECK(ledc_channel_config(&ledc_channel));
 }
 
-void setPWMOutput(float dutyPercentage) {
-    // Constrain duty to 0.0 - 1.0 range
-    if (dutyPercentage < 0.0f) {dutyPercentage = 0.0f;}
-    if (dutyPercentage > 1.0f) {dutyPercentage = 1.0f;}
-
-    // Calculate value based on 12-bit resolution (2^12 = 4096)
-    uint16_t pwmOutDutyValue = (uint16_t)(dutyPercentage * 4095.0f);
-
-    // Write to hardware - this is non-blocking
-    ledcWrite(PIN_PWM_OUT, pwmOutDutyValue);
+void setPWMOutput(uint16_t PWM_DUTY)
+{
+    // Set duty
+    ESP_ERROR_CHECK(ledc_set_duty(LEDC_MODE, LEDC_CHANNEL, PWM_DUTY));
+    // Update duty to apply the new value
+    ESP_ERROR_CHECK(ledc_update_duty(LEDC_MODE, LEDC_CHANNEL));
 }
 
 #endif

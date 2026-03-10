@@ -57,7 +57,7 @@ void loop() {
   taskPWMIn();
   taskDataLog();
   // Set pwm out to be the same as pwm in
-  setPWMOutput(0.10);
+  setPWMOutput(400);
 
 }
 
