@@ -11,72 +11,106 @@
 
 #include <Arduino.h>
 #include "pinconfig.h"
-#include "driver/gpio.h"
-#include "esp_intr_alloc.h"
-#include "soc/gpio_struct.h"
-#include "soc/interrupts.h"   // Correct header for Core 3.x / ESP-IDF 5.x
 
-volatile uint32_t pwmInHighTime_us = 0;
-volatile uint32_t pwmInPeriod_us = 0;
-volatile uint32_t pwmInLastRiseEdgeInstant = 0;
+void setupPWMIn();
+void IRAM_ATTR isr_pwm_measure();
+void taskPWMIn(void *pvParameters);
 
+// [====================================================]
+// [               IMPLEMENTATION (.c)                  ]
+// [====================================================]
+
+// Variables (ISR)
+volatile uint32_t riseTime = 0;
+volatile uint32_t fallTime = 0;
+volatile uint32_t highTime = 0;
+volatile uint32_t period = 0;
 volatile uint32_t pwmInDuty = 0;
-volatile uint32_t pwmInFreq = 0;
 
-// HIGH PRIORITY ISR
-void IRAM_ATTR PWMInterrupt(void* arg) {
-    // Accessing the .val member is required in Core 3.x
-    uint32_t gpio_intr_status = GPIO.status.val;
+// FreeRTOS Kernel Objects
+TaskHandle_t pwmTaskHandle = NULL; 
+portMUX_TYPE mux = portMUX_INITIALIZER_UNLOCKED;
+
+void IRAM_ATTR isr_pwm_measure() {
+  uint32_t currentTime = micros();
+  bool currentState = digitalRead(PIN_PWM_IN);
+  
+  if (currentState == HIGH) {
+    if ((currentTime - riseTime) > 50) { 
+      portENTER_CRITICAL_ISR(&mux);
+      period = currentTime - riseTime;
+      riseTime = currentTime;
+      portEXIT_CRITICAL_ISR(&mux);
+    }
+  } 
+  else { 
+    if ((currentTime - fallTime) > 50) {
+      portENTER_CRITICAL_ISR(&mux);
+      fallTime = currentTime;
+      highTime = fallTime - riseTime;
+      portEXIT_CRITICAL_ISR(&mux);
+      
+      // FreeRTOS: Activate the math task instantly.
+      BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+      vTaskNotifyGiveFromISR(pwmTaskHandle, &xHigherPriorityTaskWoken);
+      
+      if (xHigherPriorityTaskWoken) {
+        portYIELD_FROM_ISR(); // Forces context switching in the processor
+      }
+    }
+  }
+}
+
+void taskPWMIn(void *pvParameters) {
+  for (;;) {
+    // Sleeps indefinitely (blocks) until the ISR sends the signal
+    ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+
+    uint32_t safeHighTime = 0;
+    uint32_t safePeriod = 0;
     
-    // Clear the interrupt status
-    GPIO.status_w1tc.val = gpio_intr_status;
+    // Critical Section Safe for Multitasking
+    portENTER_CRITICAL(&mux);
+    safeHighTime = highTime;
+    safePeriod = period;
+    portEXIT_CRITICAL(&mux);
 
-    if (gpio_intr_status & (1ULL << PIN_PWM_IN)) {
-        uint32_t pwmInTime = micros();
-        
-        if (digitalRead(PIN_PWM_IN) == HIGH) {
-            delayMicroseconds(50);
-            // RISING EDGE
-            pwmInPeriod_us = pwmInTime - pwmInLastRiseEdgeInstant;
-            pwmInLastRiseEdgeInstant = pwmInTime;
-        } else {
-            // FALLING EDGE
-            pwmInHighTime_us = pwmInTime - pwmInLastRiseEdgeInstant;
-        }
+    if (safePeriod > 0 && safeHighTime <= safePeriod) {
+      float frequency = 1000000.0 / (float)safePeriod;
+      pwmInDuty = ((16383 * safeHighTime) / safePeriod);
+
+      Serial.print("Period: ");
+      Serial.print(safePeriod);
+      Serial.print(" us \t | \t High Time: ");
+      Serial.print(safeHighTime);
+      Serial.print(" us \t | \t Freq: ");
+      Serial.print(frequency, 2);
+      Serial.print(" Hz \t | \t Duty: ");
+      Serial.print((float)pwmInDuty*100/16383, 2);
+      Serial.println(" %");
     }
+  }
 }
 
-void setupPWMIn() {
-    // Initialize GPIO
-    gpio_config_t io_conf = {};
-    io_conf.intr_type = GPIO_INTR_ANYEDGE;
-    io_conf.mode = GPIO_MODE_INPUT;
-    io_conf.pin_bit_mask = (1ULL << PIN_PWM_IN);
-    io_conf.pull_down_en = GPIO_PULLDOWN_ENABLE;
-    io_conf.pull_up_en = GPIO_PULLUP_DISABLE;
-    gpio_config(&io_conf);
+void setupPWMIn() { 
+  
+  pinMode(PIN_PWM_IN, INPUT_PULLDOWN);
 
-    // Allocate Interrupt with Level 3 Priority
-    // ETS_GPIO_INTR_SOURCE is found in soc/interrupts.h
-    esp_intr_alloc(ETS_GPIO_INTR_SOURCE, 
-                   ESP_INTR_FLAG_LEVEL3 | ESP_INTR_FLAG_IRAM, 
-                   PWMInterrupt, 
-                   NULL, 
-                   NULL);
+  // FreeRTOS: Creates and registers the task in the operating system
+  xTaskCreate(
+    taskPWMIn,           // Name of the function that contains the task
+    "PWM_Task",          // Friendly name for internal kernel debugging
+    2048,                // Stack size allocated in Bytes
+    NULL,                // Parameters to pass (not applicable here)
+    3,                  // Task priority (High priority)
+    &pwmTaskHandle       // Passes the memory address of the handle
+  );
+
+  attachInterrupt(digitalPinToInterrupt(PIN_PWM_IN), isr_pwm_measure, CHANGE);
+
 }
 
-void taskPWMIn() {
-    uint32_t localHigh, localPeriod;
-
-    noInterrupts();
-    localHigh = pwmInHighTime_us;
-    localPeriod = pwmInPeriod_us;
-    interrupts();
-
-    if (localPeriod > 0) {
-        pwmInDuty = (16383 * localHigh) / localPeriod;
-        pwmInFreq = 1000000 / localPeriod;
-    }
-}
-
-#endif
+// [====================================================]
+// Close multiple inclusions lock
+#endif  
+// [====================================================]
