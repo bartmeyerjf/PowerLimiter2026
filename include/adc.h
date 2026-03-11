@@ -32,7 +32,7 @@ uint16_t bufferA1_0[BUFFER_SIZE];
 uint16_t bufferA1_1[BUFFER_SIZE];
 uint32_t timeStamp_0[BUFFER_SIZE];
 uint32_t timeStamp_1[BUFFER_SIZE];
-float dutyCycle[BUFFER_SIZE];
+uint32_t dutyCycle[BUFFER_SIZE];
 
 volatile uint16_t bufferIndex = 0; 
 volatile bool activeBuffer = 0; 

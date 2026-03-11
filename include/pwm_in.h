@@ -20,7 +20,7 @@ volatile uint32_t pwmInHighTime_us = 0;
 volatile uint32_t pwmInPeriod_us = 0;
 volatile uint32_t pwmInLastRiseEdgeInstant = 0;
 
-volatile float pwmInDuty = 0;
+volatile uint32_t pwmInDuty = 0;
 volatile uint32_t pwmInFreq = 0;
 
 // HIGH PRIORITY ISR
@@ -35,6 +35,7 @@ void IRAM_ATTR PWMInterrupt(void* arg) {
         uint32_t pwmInTime = micros();
         
         if (digitalRead(PIN_PWM_IN) == HIGH) {
+            delayMicroseconds(50);
             // RISING EDGE
             pwmInPeriod_us = pwmInTime - pwmInLastRiseEdgeInstant;
             pwmInLastRiseEdgeInstant = pwmInTime;
@@ -73,7 +74,7 @@ void taskPWMIn() {
     interrupts();
 
     if (localPeriod > 0) {
-        pwmInDuty = (float)localHigh / (float)localPeriod;
+        pwmInDuty = (16383 * localHigh) / localPeriod;
         pwmInFreq = 1000000 / localPeriod;
     }
 }

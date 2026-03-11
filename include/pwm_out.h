@@ -19,8 +19,8 @@
 #define LEDC_MODE               LEDC_LOW_SPEED_MODE
 #define LEDC_OUTPUT_IO          (PIN_PWM_OUT) // Define the output GPIO
 #define LEDC_CHANNEL            LEDC_CHANNEL_0
-#define LEDC_DUTY_RES           LEDC_TIMER_12_BIT // Set duty resolution to 12 bits
-#define LEDC_FREQUENCY          (75) // Frequency in Hertz
+#define LEDC_DUTY_RES           LEDC_TIMER_14_BIT // Set duty resolution to 14 bits
+#define LEDC_FREQUENCY          (74) // Frequency in Hertz
 #define LEDC_DUTY               (0) // Set duty to 0%. Range: 0 - 4095
 
 
@@ -31,7 +31,7 @@ void setupPWMOut() {
         .speed_mode       = LEDC_MODE,
         .duty_resolution  = LEDC_DUTY_RES,
         .timer_num        = LEDC_TIMER,
-        .freq_hz          = LEDC_FREQUENCY,  // Set output frequency at 4 kHz
+        .freq_hz          = LEDC_FREQUENCY,  // Set output frequency
         .clk_cfg          = LEDC_AUTO_CLK
     };
     ESP_ERROR_CHECK(ledc_timer_config(&ledc_timer));

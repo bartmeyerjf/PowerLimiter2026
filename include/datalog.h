@@ -49,11 +49,11 @@ void taskDataLog(){
         uint16_t* b0 = (activeBuffer == 1) ? bufferA0_1 : bufferA0_0;
         uint16_t* b1 = (activeBuffer == 1) ? bufferA1_1 : bufferA1_0;
         uint32_t* timeStamp = (activeBuffer == 1) ? timeStamp_1 : timeStamp_0;
-        float* dutyLog = dutyCycle;
+        uint32_t* dutyLog = dutyCycle;
 
         for (int i = 0; i < BUFFER_SIZE; i++) {
             // Write to SD
-            dataFile.print(100*dutyLog[i]);
+            dataFile.print(100*(float)dutyLog[i]/16383);
             dataFile.print(",");
             dataFile.print(timeStamp[i]);
             dataFile.print(",");
@@ -62,7 +62,7 @@ void taskDataLog(){
             dataFile.println(b1[i]);
 
             // Write to Serial
-            Serial.print(100*dutyLog[i]);
+            Serial.print(100*(float)dutyLog[i]/16383);
             Serial.print(",");
             Serial.print(timeStamp[i]);
             Serial.print(",");
