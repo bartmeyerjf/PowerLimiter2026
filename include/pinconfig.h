@@ -21,7 +21,7 @@
 #define PIN_SD_CS 7
 
 // PWM input pin
-#define PIN_PWM_IN 8
+#define PIN_PWM_IN GPIO_NUM_8
 
 // PWM input pin
 #define PIN_PWM_OUT 10

@@ -33,9 +33,8 @@ void IRAM_ATTR PWMInterrupt(void* arg) {
 
     if (gpio_intr_status & (1ULL << PIN_PWM_IN)) {
         uint32_t pwmInTime = micros();
-        
+        delayMicroseconds(50);
         if (digitalRead(PIN_PWM_IN) == HIGH) {
-            delayMicroseconds(50);
             // RISING EDGE
             pwmInPeriod_us = pwmInTime - pwmInLastRiseEdgeInstant;
             pwmInLastRiseEdgeInstant = pwmInTime;
@@ -52,17 +51,21 @@ void setupPWMIn() {
     io_conf.intr_type = GPIO_INTR_ANYEDGE;
     io_conf.mode = GPIO_MODE_INPUT;
     io_conf.pin_bit_mask = (1ULL << PIN_PWM_IN);
-    io_conf.pull_down_en = GPIO_PULLDOWN_ENABLE;
-    io_conf.pull_up_en = GPIO_PULLUP_DISABLE;
+    io_conf.pull_down_en = GPIO_PULLDOWN_DISABLE;
+    io_conf.pull_up_en = GPIO_PULLUP_ENABLE;
     gpio_config(&io_conf);
+
+    gpio_install_isr_service(ESP_INTR_FLAG_LEVEL3); 
+
+    gpio_isr_handler_add(PIN_PWM_IN, PWMInterrupt, (void*) PIN_PWM_IN);
 
     // Allocate Interrupt with Level 3 Priority
     // ETS_GPIO_INTR_SOURCE is found in soc/interrupts.h
-    esp_intr_alloc(ETS_GPIO_INTR_SOURCE, 
+/*     esp_intr_alloc(ETS_GPIO_INTR_SOURCE, 
                    ESP_INTR_FLAG_LEVEL3 | ESP_INTR_FLAG_IRAM, 
                    PWMInterrupt, 
                    NULL, 
-                   NULL);
+                   NULL); */
 }
 
 void taskPWMIn() {

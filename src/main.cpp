@@ -22,6 +22,17 @@
 //#include "lut.h"
 //#include "validation.h"
 
+volatile uint32_t t0 = 0;
+#define t1 1000000
+#define t2 7000000
+#define t3 10000000
+#define t4 10000000
+#define t5 10000000
+#define t6 10000000
+#define t7 10000000
+#define t8 10000000
+
+
 void IRAM_ATTR onTimer();
 
 // Timer Interrupt
@@ -46,22 +57,42 @@ void setup() {
   setupPWMIn();
   setupPWMOut();
   setupDataLog();
+
+  pinMode(21, INPUT);
 }
 
 // [====================================================]
 // [                 IMPLEMENTATION (.c)                ]
 // [====================================================]
 
+volatile bool runLoop = 0;
+
 // Loop code
 void loop() {
+  // Set pwm out to be the same as pwm in
+  //setPWMOutput(((uint32_t)(8.16*16383/100)));
   taskPWMIn();
   taskDataLog();
-  // Set pwm out to be the same as pwm in
-  setPWMOutput((pwmInDuty));
-
+  
+  //setPWMOutput((uint32_t)(8.16*16383/100));
+  
+  runLoop = digitalRead(21);
+  if(runLoop)
+  {
+    // Set pwm out to be the same as pwm in
+    if(micros() < t0 + t1){
+      setPWMOutput((uint32_t)(8.16*16383/100));
+    } else{
+      setPWMOutput((uint32_t)(8.88*16383/100));
+    } 
+  } else{
+    t0 = micros();
+  }
+  
 }
 
 // 1 kHz interrupt code
 void IRAM_ATTR onTimer(){
   adcRead();
-}
+  
+} 
