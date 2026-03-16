@@ -18,6 +18,9 @@
 // ADC buffer (n samples)
 #define BUFFER_SIZE 512
 
+volatile uint16_t currentReading = 0;
+volatile float currentReadingmV = 0;
+
 void setupADC();
 void adcRead();
 
@@ -67,6 +70,9 @@ void adcRead() {
     timeStamp_0[bufferIndex] = micros();
     dutyCycle[bufferIndex] = (pwmInDuty);
   }
+
+/*   currentReading = analogRead(A1);
+  currentReadingmV = analogReadMilliVolts(A1); */
 
   // Update index and flag when buffer is full
   bufferIndex ++;

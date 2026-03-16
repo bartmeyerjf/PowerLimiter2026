@@ -61,11 +61,11 @@ void setupPWMIn() {
 
     // Allocate Interrupt with Level 3 Priority
     // ETS_GPIO_INTR_SOURCE is found in soc/interrupts.h
-/*     esp_intr_alloc(ETS_GPIO_INTR_SOURCE, 
+    esp_intr_alloc(ETS_GPIO_INTR_SOURCE, 
                    ESP_INTR_FLAG_LEVEL3 | ESP_INTR_FLAG_IRAM, 
                    PWMInterrupt, 
                    NULL, 
-                   NULL); */
+                   NULL);
 }
 
 void taskPWMIn() {
