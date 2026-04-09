@@ -13,6 +13,7 @@
 #include <WiFi.h>
 
 #include "pinconfig.h"
+#include "datafit.h"
 #include "adc.h"
 #include "datalog.h"
 
