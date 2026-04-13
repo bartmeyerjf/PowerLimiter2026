@@ -12,24 +12,26 @@
 
 #include <Arduino.h>
 
-#define voltageSlope 6.820
+#define voltageSlope 6.82
 #define voltageZero 119.9
 #define currentSlope -10.98
 #define currentZero 38797
 
-float voltage(uint16_t readingValue){};
-float current(uint16_t readingValue){};
+uint16_t voltageFit(uint16_t readingValue){};
+uint16_t currentFit(uint16_t readingValue){};
 
 // [====================================================]
 // [               IMPLEMENTATION (.c)                  ]
 // [====================================================]
 
-float voltage(uint16_t readingValue){
-    return(voltageSlope*(float)readingValue+voltageZero);
+// Linar regression is used to convert mesurements into real values
+
+uint16_t voltageFit(uint16_t readingValue){
+    return(voltageSlope*readingValue+voltageZero);
 }
 
-float current(uint16_t readingValue){
-    return(currentSlope*(float)readingValue+currentZero);
+uint16_t currentFit(uint16_t readingValue){
+    return(currentSlope*readingValue+currentZero);
 }
 
 // [====================================================]

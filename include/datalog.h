@@ -57,18 +57,18 @@ void taskDataLog(){
             dataFile.print(",");
             dataFile.print(timeStamp[i]);
             dataFile.print(",");
-            dataFile.print(b0[i]);
+            dataFile.print(voltageFit(b0[i]));
             dataFile.print(",");
-            dataFile.println(b1[i]);
+            dataFile.println(currentFit(b1[i]));
 
             // Write to Serial
             Serial.print(100*(float)dutyLog[i]/16383);
             Serial.print(",");
             Serial.print(timeStamp[i]);
             Serial.print(",");
-            Serial.print(b0[i]);
+            Serial.print(voltageFit(b0[i]));
             Serial.print(",");
-            Serial.println(b1[i]);
+            Serial.println(currentFit(b1[i]));
         }
         dataFile.flush(); // Ensure data is saved
         isBufferReady = false; // Reset flag
