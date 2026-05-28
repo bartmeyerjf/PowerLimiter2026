@@ -16,7 +16,7 @@
 #include "datafit.h"
 #include "adc.h"
 #include "datalog.h"
-
+#include "control.h"
 #include "pwm_in.h"
 #include "pwm_out.h"
 
@@ -28,7 +28,8 @@ hw_timer_t *timer = NULL;
 // Setup code
 void setup() {
   // Start serial monitor
-  Serial.begin(460800);
+  //Serial.begin(460800);
+
   // Turn off wifi and bluetooth
   WiFi.mode(WIFI_OFF);
   btStop();

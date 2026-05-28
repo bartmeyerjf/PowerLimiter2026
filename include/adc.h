@@ -19,7 +19,7 @@
 #define BUFFER_SIZE 512
 
 volatile uint16_t currentReading = 0;
-volatile float currentReadingmV = 0;
+volatile uint16_t voltageReading = 0;
 
 void setupADC();
 void adcRead();
@@ -58,21 +58,22 @@ void setupADC() {
 }
 
 void adcRead() {
-  // Read ADC and save in active buffer
+  // Read ADC and 
+  voltageReading = analogRead(A0);
+  currentReading = analogRead(A1);
+
+  // save in active buffer
   if (activeBuffer == 1) {
-    bufferA0_1[bufferIndex] = analogRead(A0);
-    bufferA1_1[bufferIndex] = analogRead(A1);
+    bufferA0_1[bufferIndex] = voltageReading;
+    bufferA1_1[bufferIndex] = currentReading;
     timeStamp_1[bufferIndex] = micros();
     dutyCycle[bufferIndex] = (pwmInDuty);
   } else {
-    bufferA0_0[bufferIndex] = analogRead(A0);
-    bufferA1_0[bufferIndex] = analogRead(A1);
+    bufferA0_0[bufferIndex] = voltageReading;
+    bufferA1_0[bufferIndex] = currentReading;
     timeStamp_0[bufferIndex] = micros();
     dutyCycle[bufferIndex] = (pwmInDuty);
   }
-
-/*   currentReading = analogRead(A1);
-  currentReadingmV = analogReadMilliVolts(A1); */
 
   // Update index and flag when buffer is full
   bufferIndex ++;
