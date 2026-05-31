@@ -17,8 +17,11 @@
 #include "adc.h"
 #include "datalog.h"
 #include "control.h"
-#include "pwm_in.h"
+//#include "pwm_in.h"
 #include "pwm_out.h"
+#include "plant_model.h"
+
+#define INTERRUPT_TIME_US 10000 // time in microseconds
 
 void IRAM_ATTR onTimer();
 
@@ -27,28 +30,23 @@ hw_timer_t *timer = NULL;
 
 // Setup code
 void setup() {
-  // Start serial monitor
-  //Serial.begin(460800);
-
   // Turn off wifi and bluetooth
   WiFi.mode(WIFI_OFF);
   btStop();
 
-  // Timer Setup (1kHz -> 1000 us)
+  // Timer Setup
   timer = timerBegin(0, 80, true); // prescaler 80 -> 1000 us
   timerAttachInterrupt(timer, &onTimer, true);
-  timerAlarmWrite(timer, 1000, true);
+  timerAlarmWrite(timer, INTERRUPT_TIME_US, true);
   timerAlarmEnable(timer);
 
   // Setup libraries
   setupADC();
-  setupPWMIn();
+  //setupPWMIn();
   setupDataLog();
   setupPWMOut();
-
-  // starter value for pwm output
-  //setPWMOutput((uint32_t)(8.16*16383/100));
   
+  taskModel();
 }
 
 // [====================================================]
@@ -57,15 +55,12 @@ void setup() {
 
 // Loop code
 void loop() {
-
-  taskPWMIn();
+  //taskPWMIn();
   taskDataLog();
-
-  //setPWMOutput((uint32_t)(dutyOutput*16383/100));
   
 }
 
-// 1 kHz interrupt code
+// interrupt code
 void IRAM_ATTR onTimer(){
   adcRead();
   
