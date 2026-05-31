@@ -13,7 +13,7 @@
 #include <Arduino.h>
 #include "pinconfig.h"
 
-#include "pwm_in.h"
+//#include "pwm_in.h"
 
 // ADC buffer (n samples)
 #define BUFFER_SIZE 512
@@ -66,13 +66,13 @@ void adcRead() {
   if (activeBuffer == 1) {
     bufferA0_1[bufferIndex] = voltageReading;
     bufferA1_1[bufferIndex] = currentReading;
-    timeStamp_1[bufferIndex] = micros();
-    dutyCycle[bufferIndex] = (pwmInDuty);
+    //timeStamp_1[bufferIndex] = micros();
+    //dutyCycle[bufferIndex] = (pwmInDuty);
   } else {
     bufferA0_0[bufferIndex] = voltageReading;
     bufferA1_0[bufferIndex] = currentReading;
-    timeStamp_0[bufferIndex] = micros();
-    dutyCycle[bufferIndex] = (pwmInDuty);
+    //timeStamp_0[bufferIndex] = micros();
+    //dutyCycle[bufferIndex] = (pwmInDuty);
   }
 
   // Update index and flag when buffer is full
