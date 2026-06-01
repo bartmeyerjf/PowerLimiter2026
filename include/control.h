@@ -10,6 +10,7 @@
 #define control_h
 
 #include "adc.h"
+#include "pwm_out.h"
 
 #define tau 200000 // x10e-6 s = 200 ms (aproximately)
 #define powerSetpoint 600000000 // x10e-6 W = 600 W
@@ -29,8 +30,8 @@ uint32_t Kd;
 uint32_t outMin;
 uint32_t outMax;
 
-void setupControl(){};
-void taskControl(){};
+void setupControl();
+void taskControl();
 
 
 void setupControl(){

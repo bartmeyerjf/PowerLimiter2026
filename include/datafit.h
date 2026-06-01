@@ -17,8 +17,8 @@
 #define currentSlope -10.98
 #define currentZero 38797
 
-uint32_t voltageFit(uint16_t readingValue){};
-uint32_t currentFit(uint16_t readingValue){};
+uint32_t voltageFit(uint16_t readingValue);
+uint32_t currentFit(uint16_t readingValue);
 
 // [====================================================]
 // [               IMPLEMENTATION (.c)                  ]

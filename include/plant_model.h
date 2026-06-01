@@ -27,9 +27,9 @@ volatile uint32_t t0 = 0;
 volatile uint32_t dutyOutput = 0;
 volatile uint32_t dutyPrevious = 0;
 
-void taskModel(){};
-void ramp(){};
-void step(){};
+void taskModel();
+void ramp();
+void step();
 
 void taskModel(){
   if(t0 = 0){
