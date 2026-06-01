@@ -46,7 +46,7 @@ void setup() {
   setupDataLog();
   setupPWMOut();
   
-  taskModel();
+  
 }
 
 // [====================================================]
@@ -57,7 +57,7 @@ void setup() {
 void loop() {
   //taskPWMIn();
   taskDataLog();
-  
+  taskModel();
 }
 
 // interrupt code

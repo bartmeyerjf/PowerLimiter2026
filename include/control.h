@@ -11,8 +11,8 @@
 
 #include "adc.h"
 
-#define tau 400000 // x10e-6 s = 400 ms (aproximately)
-#define maxPower 600000000 // x10e-6 W = 600 W
+#define tau 200000 // x10e-6 s = 200 ms (aproximately)
+#define powerSetpoint 600000000 // x10e-6 W = 600 W
 volatile uint32_t setPoint;
 volatile uint32_t power;
 

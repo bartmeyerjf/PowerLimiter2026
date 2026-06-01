@@ -25,6 +25,7 @@ volatile uint32_t t0 = 0;
 #define dutyStart 1336 // 8.16%
 #define dutyFinal 2128 // 12.98%
 volatile uint32_t dutyOutput = 0;
+volatile uint32_t dutyPrevious = 0;
 
 void taskModel(){};
 void ramp(){};
@@ -35,8 +36,11 @@ void taskModel(){
     t0 = micros();
   }
 
+  dutyPrevious = dutyOutput;
   step();
-  setPWMOutput(dutyOutput);
+  if(dutyOutput != dutyPrevious){
+    setPWMOutput(dutyOutput);
+  }
 
 }
 
