@@ -46,6 +46,7 @@ void taskControl(){
 void updateError(){
     errorPrevious = error;
     error = power - setPoint;
+    if(error)
     errorIntegral = errorIntegral + error;
     errorDerivative = error - errorPrevious; // assuming a unit time interval
 }

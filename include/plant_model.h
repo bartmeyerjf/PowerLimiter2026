@@ -59,7 +59,7 @@ void ramp(){
 
 void step(){
   if(micros() > 3*t3 + t1 + t0){
-    dutyOutput = (dutyStart);
+    //dutyOutput = (dutyStart);
   } else if(micros() > 2*t3 + t1 + t0){
     dutyOutput = (dutyFinal);
   } else if(micros() > t3 + t1 + t0){

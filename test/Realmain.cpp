@@ -36,21 +36,19 @@ void setup() {
   WiFi.mode(WIFI_OFF);
   btStop();
 
-/* timer = timerBegin(0, 80, true); // prescaler 80 -> 1000 us
+  // Timer Setup
+  timer = timerBegin(0, 80, true); // prescaler 80 -> 1000 us
   timerAttachInterrupt(timer, &onTimer, true);
   timerAlarmWrite(timer, INTERRUPT_TIME_US, true);
-  timerAlarmEnable(timer); */
-
-  // Timer Setup 
-  timer = timerBegin(1000000); // Configure the timer to tick at 1 MHz (1 microsecond per tick)
-  timerAttachInterrupt(timer, &onTimer); // Attach the interrupt handler
-  timerAlarm(timer, INTERRUPT_TIME_US, true, 0); // Set the alarm time, enable auto-reload (true), and reload infinitely (0)
+  timerAlarmEnable(timer);
 
   // Setup libraries
   setupADC();
   //setupPWMIn();
   setupDataLog();
   setupPWMOut();
+  
+  
 }
 
 // [====================================================]
