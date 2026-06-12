@@ -13,6 +13,9 @@
 // ADC Pins
 #define PIN_ADC_READ_VOLTAGE A0
 #define PIN_ADC_READ_CURRENT A1
+// For ESP32-C3: Pin A0 is GPIO 0, Pin A1 is GPIO 1
+#define PIN_A0 0
+#define PIN_A1 1
 
 // SD card pins
 #define PIN_SD_MISO 5

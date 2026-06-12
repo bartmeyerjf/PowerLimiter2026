@@ -21,7 +21,7 @@
 #include "pwm_out.h"
 #include "plant_model.h"
 
-#include "adc_continuous.h"
+//#include "adc_continuous.h"
 
 #define INTERRUPT_TIME_US 10000 // time in microseconds
 
@@ -66,6 +66,6 @@ void loop() {
 
 // interrupt code
 void IRAM_ATTR onTimer(){
-  adcRead();
+  adcContinuousRead();
   
 } 

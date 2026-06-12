@@ -26,10 +26,10 @@ void ARDUINO_ISR_ATTR onAdcComplete() {
 
 void setupADCC() {
 
-    // Optional: Set resolution (9-12 bits, default is 12 bits)
+    // Set resolution (9-12 bits, default is 12 bits)
     analogContinuousSetWidth(12);
 
-    // Optional: Set input attenuation (Default is ADC_11db, which is standard for ~0-3.1V range)
+    // Set input attenuation (Default is ADC_11db, which is standard for ~0-3.1V range)
     analogContinuousSetAtten(ADC_11db);
 
     // Setup the hardware peripheral
@@ -57,16 +57,16 @@ void taskADCC() {
             
             // Temporary variables
             uint16_t a0_raw = 0, a1_raw = 0;
-            int a0_mv = 0, a1_mv = 0;
+            //int a0_mv = 0, a1_mv = 0;
 
             // Iterate through the results array matching our configured pin count
             for (int i = 0; i < adc_pins_count; i++) {
                 if (adc_results[i].pin == PIN_A0) {
                     a0_raw = adc_results[i].avg_read_raw;
-                    a0_mv  = adc_results[i].avg_read_mvolts;
+                    //a0_mv  = adc_results[i].avg_read_mvolts;
                 } else if (adc_results[i].pin == PIN_A1) {
                     a1_raw = adc_results[i].avg_read_raw;
-                    a1_mv  = adc_results[i].avg_read_mvolts;
+                    //a1_mv  = adc_results[i].avg_read_mvolts;
                 }
             }
 

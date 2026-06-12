@@ -36,11 +36,11 @@ void setup() {
   WiFi.mode(WIFI_OFF);
   btStop();
 
-  // Timer Setup
+/*   // Timer Setup
   timer = timerBegin(0, 80, true); // prescaler 80 -> 1000 us
   timerAttachInterrupt(timer, &onTimer, true);
   timerAlarmWrite(timer, INTERRUPT_TIME_US, true);
-  timerAlarmEnable(timer);
+  timerAlarmEnable(timer); */
 
   // Setup libraries
   setupADC();
