@@ -25,16 +25,16 @@ File dataFile;
 
 void setupDataLog(){
 
-/*     if (!SD.begin(PIN_SD_CS)) {
-      Serial.println("SD Initialization Failed!");
+    if (!SD.begin(PIN_SD_CS)) {
+      //Serial.println("SD Initialization Failed!");
       while (1); // Stop
     }
     // Open file
     dataFile = SD.open("/session.csv", FILE_WRITE);
     if (!dataFile) {
-      Serial.println("File Open Failed!");
+      //Serial.println("File Open Failed!");
       while (1);
-    } */
+    }
     dataFile.println("A0, A1"); // Header
 
 }
