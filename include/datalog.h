@@ -35,7 +35,7 @@ void setupDataLog(){
       //Serial.println("File Open Failed!");
       while (1);
     }
-    dataFile.println("A0, A1"); // Header
+    dataFile.println("t, A0, A1"); // Header
 
 }
 
@@ -48,15 +48,15 @@ void taskDataLog(){
         // Pointer to the buffer that finished filling
         uint16_t* b0 = (activeBuffer == 1) ? bufferA0_1 : bufferA0_0;
         uint16_t* b1 = (activeBuffer == 1) ? bufferA1_1 : bufferA1_0;
-        //uint32_t* timeStamp = (activeBuffer == 1) ? timeStamp_1 : timeStamp_0;
+        uint32_t* timeStamp = (activeBuffer == 1) ? timeStamp_1 : timeStamp_0;
         //uint32_t* dutyLog = dutyCycle;
 
         for (int i = 0; i < BUFFER_SIZE; i++) {
             // Write to SD
             //dataFile.print(100*(float)dutyLog[i]/16383);
             //dataFile.print(",");
-            //dataFile.print(timeStamp[i]);
-            //dataFile.print(",");
+            dataFile.print(timeStamp[i]);
+            dataFile.print(",");
             dataFile.print((b0[i]));
             dataFile.print(",");
             dataFile.println((b1[i]));
@@ -64,8 +64,8 @@ void taskDataLog(){
             // Write to Serial
             //Serial.print(100*(float)dutyLog[i]/16383);
             //Serial.print(",");
-            //Serial.print(timeStamp[i]);
-            //Serial.print(",");
+            Serial.print(timeStamp[i]);
+            Serial.print(",");
             Serial.print((b0[i]));
             Serial.print(",");
             Serial.println((b1[i]));
