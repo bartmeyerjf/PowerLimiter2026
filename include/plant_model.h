@@ -38,6 +38,7 @@ void taskModel(){
 
   dutyPrevious = dutyOutput;
   step();
+  //ramp();
   if(dutyOutput != dutyPrevious){
     setPWMOutput(dutyOutput);
   }
