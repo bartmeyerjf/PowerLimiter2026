@@ -33,7 +33,7 @@ const uint8_t adc_pins[] = { PIN_A0, PIN_A1 };
 const uint8_t adc_pins_count = sizeof(adc_pins) / sizeof(uint8_t);
 
 // Number of raw conversions to average per cycle
-#define CONVERSIONS_PER_PIN 8
+#define CONVERSIONS_PER_PIN 1
 
 // Flag flipped by the background ISR when new averaged data is ready
 volatile bool adc_conversion_done = false;
@@ -120,12 +120,12 @@ void adcContinuousRead() {
   if (activeBuffer == 1) {
     bufferA0_1[bufferIndex] = voltageReading;
     bufferA1_1[bufferIndex] = currentReading;
-    //timeStamp_1[bufferIndex] = micros();
+    timeStamp_1[bufferIndex] = micros();
     //dutyCycle[bufferIndex] = (pwmInDuty);
   } else {
     bufferA0_0[bufferIndex] = voltageReading;
     bufferA1_0[bufferIndex] = currentReading;
-    //timeStamp_0[bufferIndex] = micros();
+    timeStamp_0[bufferIndex] = micros();
     //dutyCycle[bufferIndex] = (pwmInDuty);
   }
 
