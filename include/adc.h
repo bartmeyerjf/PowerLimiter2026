@@ -12,6 +12,7 @@
 
 #include <Arduino.h>
 #include "pinconfig.h"
+#include "datafit.h"
 
 //#include "pwm_in.h"
 
@@ -25,6 +26,7 @@ void adcContinuousRead();
 
 volatile uint16_t currentReading = 0;
 volatile uint16_t voltageReading = 0;
+volatile float power = 0; // power in Watts
 
 // ========== ADC Continuous Mode Config ==============
 
@@ -114,6 +116,7 @@ void adcContinuousRead() {
   if (analogContinuousRead(&adc_results, 0)) {
     voltageReading = adc_results[PIN_A0].avg_read_raw;
     currentReading = adc_results[PIN_A1].avg_read_raw;
+    power = voltageFit(voltageReading)*currentFit(currentReading)/1000000;
   }
 
     // save in active buffer

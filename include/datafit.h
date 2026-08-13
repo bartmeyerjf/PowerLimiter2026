@@ -17,8 +17,8 @@
 #define currentSlope -10.98
 #define currentZero 38797
 
-uint32_t voltageFit(uint16_t readingValue);
-uint32_t currentFit(uint16_t readingValue);
+float voltageFit(uint16_t readingValue);
+float currentFit(uint16_t readingValue);
 
 // [====================================================]
 // [               IMPLEMENTATION (.c)                  ]
@@ -26,11 +26,13 @@ uint32_t currentFit(uint16_t readingValue);
 
 // Linar regression is used to convert mesurements into real values
 
-uint32_t voltageFit(uint16_t readingValue){
+// reading to mV
+float voltageFit(uint16_t readingValue){
     return(voltageSlope*readingValue+voltageZero);
 }
 
-uint32_t currentFit(uint16_t readingValue){
+// reading to mA
+float currentFit(uint16_t readingValue){
     return(currentSlope*readingValue+currentZero);
 }
 
