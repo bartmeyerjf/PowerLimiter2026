@@ -21,6 +21,8 @@
 const float Kp = 735e-06f;
 const float Ki = 47e-3f;
 
+volatile float dutyControl = 0;
+
 volatile float dutyPI = 0;
 volatile float error = 0;
 volatile float errorIntegral = 0;
@@ -75,10 +77,24 @@ void updateDutyPI(){
     dutyPI = Kp*error + Ki*errorIntegral;
 } 
 
+// Determine control duty cycle
+void updateDutyControl(){
+    // Combines feedforward and PI control
+    dutyControl = 0.8*dutyFF + 0.2*dutyPI;
+
+    // Locks duty control output within min and max range
+    if (dutyControl > outMax) {
+        dutyControl = outMax;
+    } else if (dutyControl < outMin) {
+        dutyControl = outMin;
+    }
+} 
+
 void taskControl(){
     updateDutyFF();
     updateError();
     updateDutyPI();
+    updateDutyControl();
 }
 
 #endif
