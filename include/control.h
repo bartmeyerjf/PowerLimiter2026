@@ -39,6 +39,8 @@ const float BETA  = -3.4152e-03f;
 const float GAMMA =  1.3369e+00f;
 const float DELTA =  1.6145e+03f;
 
+volatile bool updateControl = 0;
+
 // Determine Feed Forward duty cycle
 void updateDutyFF(){
     // Horner's Method for fast polynomial calculation:
@@ -74,11 +76,15 @@ void updateError(){
 
 // Determine PI duty cycle
 void updateDutyPI(){
+    updateError();
     dutyPI = Kp*error + Ki*errorIntegral;
 } 
 
 // Determine control duty cycle
 void updateDutyControl(){
+    // update feedforward and PI control
+    updateDutyFF();
+    updateDutyPI();
     // Combines feedforward and PI control
     dutyControl = 0.8*dutyFF + 0.2*dutyPI;
 
@@ -91,10 +97,11 @@ void updateDutyControl(){
 } 
 
 void taskControl(){
-    updateDutyFF();
-    updateError();
-    updateDutyPI();
-    updateDutyControl();
+    if (updateControl) {
+        updateDutyControl();
+        updateControl = 0; // flag to tell program control effort value has been updated
+    }
+
 }
 
 #endif

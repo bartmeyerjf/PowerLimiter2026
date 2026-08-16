@@ -140,6 +140,8 @@ void adcContinuousRead() {
     isBufferReady = true; // Tell main loop to write to SD
   }
   
+  // flag to tell program to update control effort value
+  updateControl = 1;
 }
 
 void adcRead() {

@@ -57,4 +57,12 @@ void setPWMOutput(uint32_t PWM_DUTY)
     ESP_ERROR_CHECK(ledc_update_duty(LEDC_MODE, LEDC_CHANNEL));
 }
 
+volatile uint32_t outputDutyPrevious = 0;
+void taskPWMOutput(uint32_t outputDuty) {
+    outputDutyPrevious = outputDuty;
+    if(outputDuty != outputDutyPrevious){
+      setPWMOutput(outputDuty);
+    }
+}
+
 #endif

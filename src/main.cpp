@@ -62,13 +62,13 @@ void setup() {
 void loop() {
   //taskPWMIn();
   taskDataLog();
-
   taskModel();
+  taskControl();
   
 }
 
 // interrupt code
 void IRAM_ATTR onTimer(){
   adcContinuousRead();
-  
+  taskPWMOutput(dutyControl);
 } 
