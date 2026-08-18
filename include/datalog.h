@@ -35,7 +35,7 @@ void setupDataLog(){
       //Serial.println("File Open Failed!");
       while (1);
     }
-    dataFile.println("t, A0, A1"); // Header
+    dataFile.println("A0, A1, micros, rcDutySetpoint, dutyControl, dutyPI, dutyFF,"); // Header
 
 }
 
@@ -46,29 +46,40 @@ void setupDataLog(){
 void taskDataLog(){
     if (isBufferReady) {
         // Pointer to the buffer that finished filling
-        uint16_t* b0 = (activeBuffer == 1) ? bufferA0_1 : bufferA0_0;
-        uint16_t* b1 = (activeBuffer == 1) ? bufferA1_1 : bufferA1_0;
-        uint32_t* timeStamp = (activeBuffer == 1) ? timeStamp_1 : timeStamp_0;
-        //uint32_t* dutyLog = dutyCycle;
+        uint16_t* b0                = (activeBuffer == 1)? bufferA0_1       : bufferA0_0;
+        uint16_t* b1                = (activeBuffer == 1)? bufferA1_1       : bufferA1_0;
+        uint32_t* timeStamp         = (activeBuffer == 1)? timeStamp_1      : timeStamp_0;
+        uint32_t* rcDutySetpointLog = (activeBuffer == 1)? rcDutySetpoint_1 : rcDutySetpoint_0;
+        uint32_t* dutyControlLog    = (activeBuffer == 1)? dutyControl_1    : dutyControl_0;
+        uint32_t* dutyPILog         = (activeBuffer == 1)? dutyPI_1         : dutyPI_0;
+        uint32_t* dutyFFLog         = (activeBuffer == 1)? dutyFF_1         : dutyFF_0;
+
 
         for (int i = 0; i < BUFFER_SIZE; i++) {
             // Write to SD
-            //dataFile.print(100*(float)dutyLog[i]/16383);
-            //dataFile.print(",");
-            dataFile.print(timeStamp[i]);
-            dataFile.print(",");
             dataFile.print((b0[i]));
             dataFile.print(",");
             dataFile.println((b1[i]));
+            dataFile.print(",");
+            dataFile.print(timeStamp[i]);
+            dataFile.print(",");
+            dataFile.print(rcDutySetpointLog[i]);
+            dataFile.print(",");
+            dataFile.print(dutyControlLog[i]);
+            dataFile.print(",");
+            dataFile.print(dutyPILog[i]);
+            dataFile.print(",");
+            dataFile.print(dutyFFLog[i]);
+            dataFile.println(",");
 
-            // Write to Serial
-            //Serial.print(100*(float)dutyLog[i]/16383);
-            //Serial.print(",");
+            /*// Write to Serial
+            Serial.print(100*(float)dutyLog[i]/16383);
+            Serial.print(",");
             Serial.print(timeStamp[i]);
             Serial.print(",");
             Serial.print((b0[i]));
             Serial.print(",");
-            Serial.println((b1[i]));
+            Serial.println((b1[i]));*/
         }
         dataFile.flush(); // Ensure data is saved
         isBufferReady = false; // Reset flag

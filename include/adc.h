@@ -13,7 +13,8 @@
 #include <Arduino.h>
 #include "pinconfig.h"
 #include "datafit.h"
-
+#include "plant_model.h"
+#include "control.h"
 //#include "pwm_in.h"
 
 void setupADC();
@@ -26,7 +27,7 @@ void adcContinuousRead();
 
 volatile uint16_t currentReading = 0;
 volatile uint16_t voltageReading = 0;
-volatile float power = 0; // power in Watts
+
 
 // ========== ADC Continuous Mode Config ==============
 
@@ -83,7 +84,14 @@ uint16_t bufferA1_0[BUFFER_SIZE];
 uint16_t bufferA1_1[BUFFER_SIZE];
 uint32_t timeStamp_0[BUFFER_SIZE];
 uint32_t timeStamp_1[BUFFER_SIZE];
-uint32_t dutyCycle[BUFFER_SIZE];
+uint32_t rcDutySetpoint_0[BUFFER_SIZE];
+uint32_t rcDutySetpoint_1[BUFFER_SIZE];
+uint32_t dutyControl_0[BUFFER_SIZE];
+uint32_t dutyControl_1[BUFFER_SIZE];
+uint32_t dutyPI_0[BUFFER_SIZE];
+uint32_t dutyPI_1[BUFFER_SIZE];
+uint32_t dutyFF_0[BUFFER_SIZE];
+uint32_t dutyFF_1[BUFFER_SIZE];
 
 uint16_t bufferIndex = 0; 
 volatile bool activeBuffer = 0; 
@@ -103,7 +111,14 @@ void setupADC() {
     bufferA1_1[i] = 0;
     timeStamp_0[i] = 0;
     timeStamp_1[i] = 0;
-    dutyCycle[i] = 0;
+    rcDutySetpoint_0[i] = 0;
+    rcDutySetpoint_1[i] = 0;
+    dutyControl_0[i] = 0;
+    dutyControl_1[i] = 0;
+    dutyPI_0[i] = 0;
+    dutyPI_1[i] = 0;
+    dutyFF_0[i] = 0;
+    dutyFF_1[i] = 0;
   }
 }
 
@@ -116,7 +131,7 @@ void adcContinuousRead() {
   if (analogContinuousRead(&adc_results, 0)) {
     voltageReading = adc_results[PIN_A0].avg_read_raw;
     currentReading = adc_results[PIN_A1].avg_read_raw;
-    power = voltageFit(voltageReading)*currentFit(currentReading)/1000000;
+    
   }
 
     // save in active buffer
@@ -124,12 +139,18 @@ void adcContinuousRead() {
     bufferA0_1[bufferIndex] = voltageReading;
     bufferA1_1[bufferIndex] = currentReading;
     timeStamp_1[bufferIndex] = micros();
-    //dutyCycle[bufferIndex] = (pwmInDuty);
+    rcDutySetpoint_1[bufferIndex] = rcDutySetpoint;
+    dutyControl_1[bufferIndex] = (uint32_t)dutyControl;
+    dutyPI_1[bufferIndex] = (uint32_t)dutyPI;
+    dutyFF_1[bufferIndex] = (uint32_t)dutyFF;
   } else {
     bufferA0_0[bufferIndex] = voltageReading;
     bufferA1_0[bufferIndex] = currentReading;
     timeStamp_0[bufferIndex] = micros();
-    //dutyCycle[bufferIndex] = (pwmInDuty);
+    rcDutySetpoint_0[bufferIndex] = rcDutySetpoint;
+    dutyControl_0[bufferIndex] = (uint32_t)dutyControl;
+    dutyPI_0[bufferIndex] = (uint32_t)dutyPI;
+    dutyFF_0[bufferIndex] = (uint32_t)dutyFF;
   }
 
   // Update index and flag when buffer is full
@@ -139,9 +160,6 @@ void adcContinuousRead() {
     activeBuffer = !(activeBuffer);
     isBufferReady = true; // Tell main loop to write to SD
   }
-  
-  // flag to tell program to update control effort value
-  updateControl = 1;
 }
 
 void adcRead() {
@@ -169,6 +187,10 @@ void adcRead() {
     activeBuffer = !(activeBuffer);
     isBufferReady = true; // Tell main loop to write to SD
   }
+}
+
+void taskADC(){
+    power = voltageFit(voltageReading)*currentFit(currentReading)/1000000;
 }
 
 // [====================================================]

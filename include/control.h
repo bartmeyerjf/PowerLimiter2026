@@ -21,6 +21,7 @@
 const float Kp = 735e-06f;
 const float Ki = 47e-3f;
 
+volatile float power = 0; // power in Watts
 volatile float dutyControl = 0;
 
 volatile float dutyPI = 0;
