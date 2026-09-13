@@ -35,7 +35,7 @@ void setupDataLog(){
       //Serial.println("File Open Failed!");
       while (1);
     }
-    dataFile.println("A0, A1, micros, rcDutySetpoint, dutyControl, dutyPI, dutyFF,"); // Header
+    dataFile.println("A0, A1, micros, rcPowerSetpoint, dutyControl, dutyPI, dutyFF, power,"); // Header
 
 }
 
@@ -49,7 +49,7 @@ void taskDataLog(){
         uint16_t* b0                = (activeBuffer == 1)? bufferA0_1       : bufferA0_0;
         uint16_t* b1                = (activeBuffer == 1)? bufferA1_1       : bufferA1_0;
         uint32_t* timeStamp         = (activeBuffer == 1)? timeStamp_1      : timeStamp_0;
-        uint32_t* rcDutySetpointLog = (activeBuffer == 1)? rcDutySetpoint_1 : rcDutySetpoint_0;
+        float* rcPowerSetpointLog = (activeBuffer == 1)? rcPowerSetpoint_1 : rcPowerSetpoint_0;
         uint32_t* dutyControlLog    = (activeBuffer == 1)? dutyControl_1    : dutyControl_0;
         uint32_t* dutyPILog         = (activeBuffer == 1)? dutyPI_1         : dutyPI_0;
         uint32_t* dutyFFLog         = (activeBuffer == 1)? dutyFF_1         : dutyFF_0;
@@ -64,7 +64,7 @@ void taskDataLog(){
             dataFile.print(",");
             dataFile.print(timeStamp[i]);
             dataFile.print(",");
-            dataFile.print(rcDutySetpointLog[i]);
+            dataFile.print(rcPowerSetpointLog[i]);
             dataFile.print(",");
             dataFile.print(dutyControlLog[i]);
             dataFile.print(",");
