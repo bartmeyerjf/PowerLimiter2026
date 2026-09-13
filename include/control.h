@@ -18,8 +18,11 @@
 #define dt 0.01 // time in seconds (10 ms)
 #define outMin 1336
 #define outMax 2128
-const float Kp = 735e-06f;
-const float Ki = 47e-3f;
+//const float Kp = 735e-06f;
+//const float Ki = 47e-3f;
+
+const float Kp = 1.6;
+const float Ki = 0.0873;
 
 volatile float power = 0; // power in Watts
 volatile float dutyControl = 0;
