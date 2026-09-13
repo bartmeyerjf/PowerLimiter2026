@@ -53,7 +53,7 @@ void updateDutyFF(){
 } 
 
 void updateError(){
-    error = power - rcPowerSetpoint;
+    error = rcPowerSetpoint - power;
     // Anti-Windup (Clamping) and Output Saturation
     if (dutyPI > outMax) {
         dutyPI = outMax;
