@@ -33,7 +33,7 @@ void ramp();
 void step();
 
 void taskModel(){
-  if(t0 = 0){
+  if(t0 == 0){
     t0 = micros();
   }
   
