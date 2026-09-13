@@ -92,6 +92,8 @@ uint32_t dutyPI_0[BUFFER_SIZE];
 uint32_t dutyPI_1[BUFFER_SIZE];
 uint32_t dutyFF_0[BUFFER_SIZE];
 uint32_t dutyFF_1[BUFFER_SIZE];
+float power_0[BUFFER_SIZE];
+float power_1[BUFFER_SIZE];
 
 uint16_t bufferIndex = 0; 
 volatile bool activeBuffer = 0; 
@@ -119,6 +121,8 @@ void setupADC() {
     dutyPI_1[i] = 0;
     dutyFF_0[i] = 0;
     dutyFF_1[i] = 0;
+    power_0[i] = 0;
+    power_1[i] = 0;
   }
 }
 
@@ -143,6 +147,7 @@ void adcContinuousRead() {
     dutyControl_1[bufferIndex] = (uint32_t)dutyControl;
     dutyPI_1[bufferIndex] = (uint32_t)dutyPI;
     dutyFF_1[bufferIndex] = (uint32_t)dutyFF;
+    power_1[bufferIndex] = power;
   } else {
     bufferA0_0[bufferIndex] = voltageReading;
     bufferA1_0[bufferIndex] = currentReading;
@@ -151,6 +156,7 @@ void adcContinuousRead() {
     dutyControl_0[bufferIndex] = (uint32_t)dutyControl;
     dutyPI_0[bufferIndex] = (uint32_t)dutyPI;
     dutyFF_0[bufferIndex] = (uint32_t)dutyFF;
+    power_0[bufferIndex] = power;
   }
 
   // Update index and flag when buffer is full

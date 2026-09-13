@@ -44,8 +44,9 @@ void taskModel(){
 }
 
 void ramp(){
-  if(micros() > t2 + t3 + t0){
+  if(micros() > t2 + t3 + 6000000 + t0){
     rcDutySetpoint = (dutyStart);
+    taskPWMOutput(dutyStart);
   } else if(micros() > t2 + t0){
     rcDutySetpoint = (dutyFinal);
   } else if(micros() < t1 + t0){

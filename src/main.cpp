@@ -66,11 +66,11 @@ void loop() {
   taskADC();
   taskControl();
   //taskPWMOutput((uint32_t)rcDutySetpoint);
-  taskPWMOutput((uint32_t)dutyControl);
 }
 
 // interrupt code
 void onTimer(){
+  taskPWMOutput((uint32_t)dutyControl);
   updateControl = 1; // flag to tell program to update control effort value
   adcContinuousRead();
 } 

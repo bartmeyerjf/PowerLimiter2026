@@ -53,6 +53,7 @@ void taskDataLog(){
         uint32_t* dutyControlLog    = (activeBuffer == 1)? dutyControl_1    : dutyControl_0;
         uint32_t* dutyPILog         = (activeBuffer == 1)? dutyPI_1         : dutyPI_0;
         uint32_t* dutyFFLog         = (activeBuffer == 1)? dutyFF_1         : dutyFF_0;
+        float* powerLog             = (activeBuffer == 1)? power_1          : power_0;
 
 
         for (int i = 0; i < BUFFER_SIZE; i++) {
@@ -70,6 +71,8 @@ void taskDataLog(){
             dataFile.print(dutyPILog[i]);
             dataFile.print(",");
             dataFile.print(dutyFFLog[i]);
+            dataFile.print(",");
+            dataFile.print(powerLog[i]);
             dataFile.println(",");
 
             /*// Write to Serial
