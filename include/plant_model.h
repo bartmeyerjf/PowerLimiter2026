@@ -50,6 +50,7 @@ void ramp(){
   } else if(micros() > t2 + t0){
     rcDutySetpoint = (dutyFinal);
   } else if(micros() < t1 + t0){
+    taskPWMOutput(dutyStart);
     rcDutySetpoint = (dutyStart);
   } else{
     rcDutySetpoint =(dutyStart+(micros()-t1-t0)*(dutyFinal-dutyStart)/(t2-t1));
