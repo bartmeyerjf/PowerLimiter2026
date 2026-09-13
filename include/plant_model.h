@@ -26,7 +26,7 @@ volatile uint32_t t0 = 8000000;
 #define dutyFinal 2128 // 12.98%
 #define maxPowerSetpoint 500 // max value for power setpoint in W
 volatile uint16_t rcDutySetpoint = 0;  // remote controller duty setpoint in 16 bit value
-volatile uint16_t rcPowerSetpoint = 0; // remote controller duty setpoint in Watts
+volatile uint32_t rcPowerSetpoint = 0; // remote controller duty setpoint in Watts
 
 void taskModel();
 void ramp();
@@ -37,8 +37,8 @@ void taskModel(){
     t0 = micros();
   }
   
-  step();
-  //ramp();
+  //step();
+  ramp();
   rcPowerSetpoint = (rcDutySetpoint - dutyStart)*maxPowerSetpoint/(dutyFinal - dutyStart);
 
 }

@@ -87,7 +87,7 @@ void updateDutyControl(){
     updateDutyFF();
     updateDutyPI();
     // Combines feedforward and PI control
-    dutyControl = 0.8*dutyFF + 0.2*dutyPI;
+    dutyControl = dutyFF + dutyPI;
 
     // Locks duty control output within min and max range
     if (dutyControl > outMax) {
