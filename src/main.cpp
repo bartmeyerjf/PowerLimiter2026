@@ -65,12 +65,11 @@ void loop() {
   taskModel();
   taskADC();
   taskControl();
-  
+  taskPWMOutput((uint16_t)rcDutySetpoint);
 }
 
 // interrupt code
-void IRAM_ATTR onTimer(){
-  taskPWMOutput((uint16_t)rcDutySetpoint);
+void onTimer(){
   //taskPWMOutput((uint16_t)dutyControl);
   updateControl = 1; // flag to tell program to update control effort value
   adcContinuousRead();
