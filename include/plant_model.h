@@ -20,7 +20,7 @@
 
 volatile uint32_t t0 = 8000000;
 #define t1 8000000
-#define t2 8200000
+#define t2 8500000
 #define t3 4000000
 #define dutyStart 1336 // 8.16%
 #define dutyFinal 2128 // 12.98%
