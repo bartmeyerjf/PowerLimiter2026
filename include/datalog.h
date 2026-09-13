@@ -59,7 +59,7 @@ void taskDataLog(){
             // Write to SD
             dataFile.print((b0[i]));
             dataFile.print(",");
-            dataFile.println((b1[i]));
+            dataFile.print((b1[i]));
             dataFile.print(",");
             dataFile.print(timeStamp[i]);
             dataFile.print(",");
