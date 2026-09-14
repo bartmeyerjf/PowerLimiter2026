@@ -107,6 +107,10 @@ void taskControl(){
         updateControl = 0; // flag to tell program control effort value has been updated
     }
 
+    if((micros() < t1 + t0) || (micros() > t2 + t3 + 6000000 + t0)){
+    dutyControl = dutyStart;
+    }
+
 }
 
 #endif
