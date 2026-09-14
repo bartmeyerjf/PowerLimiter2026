@@ -59,8 +59,9 @@ void setPWMOutput(uint16_t PWM_DUTY)
 
 volatile uint16_t outputDutyPrevious = 0;
 void taskPWMOutput(uint16_t outputDuty) {
-    // if(outputDuty != outputDutyPrevious){}
-    setPWMOutput(outputDuty);
+    if(outputDuty != outputDutyPrevious){
+        setPWMOutput(outputDuty);
+    }
     outputDutyPrevious = outputDuty;
 }
 
