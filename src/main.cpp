@@ -66,10 +66,7 @@ void loop() {
   taskADC();
   taskControl();
   //taskPWMOutput((uint32_t)rcDutySetpoint);
-}
 
-// interrupt code
-void onTimer(){
   if((micros() < t1 + t0) || (micros() > t2 + t3 + 6000000 + t0)){
     taskPWMOutput(dutyStart);
     updateControl = 0;
@@ -77,5 +74,11 @@ void onTimer(){
     taskPWMOutput((uint32_t)dutyControl);
     updateControl = 1; // flag to tell program to update control effort value
   }
+}
+
+// interrupt code
+void onTimer(){
+    //taskPWMOutput((uint32_t)dutyControl);
+    updateControl = 1; // flag to tell program to update control effort value
   adcContinuousRead();
 } 
