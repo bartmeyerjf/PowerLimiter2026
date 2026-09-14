@@ -90,8 +90,8 @@ void updateDutyControl(){
     updateDutyFF();
     updateDutyPI();
     // Combines feedforward and PI control
-    dutyControl = dutyPI;
-    //dutyControl = dutyFF + dutyPI;
+    //dutyControl = dutyPI;
+    dutyControl = dutyFF + dutyPI;
 
     // Locks duty control output within min and max range
     if (dutyControl > outMax) {
@@ -109,6 +109,7 @@ void taskControl(){
 
     if((micros() < t1 + t0) || (micros() > t2 + t3 + 6000000 + t0)){
     dutyControl = dutyStart;
+    updateControl = 0;
     }
 
 }
