@@ -144,7 +144,7 @@ void adcContinuousRead() {
     bufferA1_1[bufferIndex] = currentReading;
     timeStamp_1[bufferIndex] = micros();
     rcPowerSetpoint_1[bufferIndex] = rcPowerSetpoint;
-    dutyControl_1[bufferIndex] = (uint32_t)dutyControl;
+    //dutyControl_1[bufferIndex] = (uint32_t)dutyControl;
     dutyPI_1[bufferIndex] = (uint32_t)dutyPI;
     dutyFF_1[bufferIndex] = (uint32_t)dutyFF;
     power_1[bufferIndex] = power;
@@ -153,7 +153,7 @@ void adcContinuousRead() {
     bufferA1_0[bufferIndex] = currentReading;
     timeStamp_0[bufferIndex] = micros();
     rcPowerSetpoint_0[bufferIndex] = rcPowerSetpoint;
-    dutyControl_0[bufferIndex] = (uint32_t)dutyControl;
+    //dutyControl_0[bufferIndex] = (uint32_t)dutyControl;
     dutyPI_0[bufferIndex] = (uint32_t)dutyPI;
     dutyFF_0[bufferIndex] = (uint32_t)dutyFF;
     power_0[bufferIndex] = power;
@@ -177,13 +177,9 @@ void adcRead() {
   if (activeBuffer == 1) {
     bufferA0_1[bufferIndex] = voltageReading;
     bufferA1_1[bufferIndex] = currentReading;
-    //timeStamp_1[bufferIndex] = micros();
-    //dutyCycle[bufferIndex] = (pwmInDuty);
   } else {
     bufferA0_0[bufferIndex] = voltageReading;
     bufferA1_0[bufferIndex] = currentReading;
-    //timeStamp_0[bufferIndex] = micros();
-    //dutyCycle[bufferIndex] = (pwmInDuty);
   }
 
   // Update index and flag when buffer is full
@@ -196,7 +192,7 @@ void adcRead() {
 }
 
 void taskADC(){
-    power = voltageFit(voltageReading)*currentFit(currentReading)/1000000;
+    power = voltageFit(voltageReading)*currentFit(currentReading);
 }
 
 // [====================================================]

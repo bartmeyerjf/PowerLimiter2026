@@ -26,14 +26,14 @@ float currentFit(uint16_t readingValue);
 
 // Linar regression is used to convert mesurements into real values
 
-// reading to mV
+// reading to V
 float voltageFit(uint16_t readingValue){
-    return(voltageSlope*readingValue+voltageZero);
+    return(voltageSlope*(float)readingValue+voltageZero)/1000;
 }
 
-// reading to mA
+// reading to A
 float currentFit(uint16_t readingValue){
-    return(currentSlope*readingValue+currentZero);
+    return(currentSlope*(float)readingValue+currentZero)/1000;
 }
 
 // [====================================================]

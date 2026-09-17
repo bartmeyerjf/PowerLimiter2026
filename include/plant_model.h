@@ -31,6 +31,8 @@ volatile float rcPowerSetpoint = 0; // remote controller duty setpoint in Watts
 void taskModel();
 void ramp();
 void step();
+float dutyValueToPercentage(uint32_t dutyValue);
+uint32_t dutyPercentageToValue(float dutyPercentage);
 
 void taskModel(){
   if(t0 == 0){
@@ -39,7 +41,7 @@ void taskModel(){
   
   //step();
   ramp();
-  rcPowerSetpoint = (rcDutySetpoint - dutyStart)*maxPowerSetpoint/(dutyFinal - dutyStart);
+  rcPowerSetpoint = maxPowerSetpoint*dutyValueToPercentage(rcDutySetpoint);
 
 }
 
@@ -71,6 +73,13 @@ void step(){
 
 }
 
+float dutyValueToPercentage(uint32_t dutyValue){
+  return (dutyValue-1336)/(2128-1336);
+}
+
+uint32_t dutyPercentageToValue(float dutyPercentage){
+  return dutyPercentage*(2128-1336)+1336;
+}
 
 // [====================================================]
 // Close multiple inclusions lock
