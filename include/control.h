@@ -21,8 +21,11 @@
 //const float Kp = 735e-06f;
 //const float Ki = 47e-3f;
 
-const float Kp = 1.6;
-const float Ki = 0.0873;
+//const float Kp = 1.6;
+//const float Ki = 0.0873;
+
+const float Kp = 0.0015;
+const float Ki = 0.05;
 
 volatile float power = 0; // power in Watts
 volatile float dutyControl = 0;
@@ -38,10 +41,15 @@ void updateError();
 void updateDutyPI();
 
 volatile float dutyFF = 0;
-const float ALPHA =  3.8786e-06f;
-const float BETA  = -3.4152e-03f;
-const float GAMMA =  1.3369e+00f;
-const float DELTA =  1.6145e+03f;
+const float ALPHA =  0.0984e-06f;
+const float BETA  = -0.0869e-03f;
+const float GAMMA =  0.0034e+00f;
+const float DELTA = -0.0030e+03f;
+
+//const float ALPHA =  3.8786e-06f;
+//const float BETA  = -3.4152e-03f;
+//const float GAMMA =  1.3369e+00f;
+//const float DELTA =  1.6145e+03f;
 
 volatile bool updateControl = 0;
 
@@ -91,7 +99,8 @@ void updateDutyControl(){
     updateDutyPI();
     // Combines feedforward and PI control
     //dutyControl = dutyPI;
-    dutyControl = dutyFF + dutyPI;
+    //dutyControl = dutyPercentageToValue(dutyFF + dutyPI);
+    dutyControl = dutyPercentageToValue(dutyPI);
 
     // Locks duty control output within min and max range
     if (dutyControl > outMax) {
@@ -107,10 +116,11 @@ void taskControl(){
         updateControl = 0; // flag to tell program control effort value has been updated
     }
 
-    if((micros() < t1 + t0) || (micros() > t2 + t3 + 6000000 + t0)){
+    /*
+    if((micros() < timeStart + t0) || (micros() > timeEnd + t0)){
     dutyControl = dutyStart;
     updateControl = 0;
-    }
+    }*/
 
 }
 

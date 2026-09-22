@@ -22,6 +22,9 @@ volatile uint32_t t0 = 8000000;
 #define t1 8000000
 #define t2 8500000
 #define t3 4000000
+#define timeStart 8000000
+#define timeSignal 9000000
+#define timeEnd 15000000
 #define dutyStart 1336 // 8.16%
 #define dutyFinal 2128 // 12.98%
 #define maxPowerSetpoint 500 // max value for power setpoint in W
@@ -32,7 +35,7 @@ void taskModel();
 void ramp();
 void step();
 float dutyValueToPercentage(uint32_t dutyValue);
-uint32_t dutyPercentageToValue(float dutyPercentage);
+uint16_t dutyPercentageToValue(float dutyPercentage);
 
 void taskModel(){
   if(t0 == 0){
@@ -45,7 +48,7 @@ void taskModel(){
 
 }
 
-void ramp(){
+void rampOld(){
   if(micros() > t2 + t3 + 6000000 + t0){
     rcDutySetpoint = (dutyStart);
   } else if(micros() > t2 + t0){
@@ -54,6 +57,21 @@ void ramp(){
     rcDutySetpoint = (dutyStart);
   } else{
     rcDutySetpoint =(dutyStart+(micros()-t1-t0)*(dutyFinal-dutyStart)/(t2-t1));
+  }
+
+}
+
+void ramp(){
+  if((micros() < timeStart + t0) || (micros() > timeEnd + t0) ){
+    // set output to zero at beguining and end
+    rcDutySetpoint = (dutyStart);
+    dutyControl = dutyStart;
+    updateControl = 0;
+  } else if(micros() < timeSignal + t0){
+    // ramp
+    rcPowerSetpoint =((micros()-timeStart-t0)*(maxPowerSetpoint)/(timeSignal-timeStart));
+  } else{
+    rcPowerSetpoint = maxPowerSetpoint;
   }
 
 }
@@ -73,11 +91,11 @@ void step(){
 
 }
 
-float dutyValueToPercentage(uint32_t dutyValue){
+float dutyValueToPercentage(uint16_t dutyValue){
   return (dutyValue-1336)/(2128-1336);
 }
 
-uint32_t dutyPercentageToValue(float dutyPercentage){
+uint16_t dutyPercentageToValue(float dutyPercentage){
   return dutyPercentage*(2128-1336)+1336;
 }
 
