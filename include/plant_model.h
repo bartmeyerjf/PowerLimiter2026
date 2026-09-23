@@ -61,6 +61,7 @@ void rampOld(){
 
 }
 
+
 void ramp(){
   if((micros() < timeStart + t0) || (micros() > timeEnd + t0) ){
     // set output to zero at beguining and end
@@ -73,7 +74,18 @@ void ramp(){
   } else{
     rcPowerSetpoint = maxPowerSetpoint;
   }
+}
 
+void rampDuty(){
+  if((micros() < timeStart + t0) || (micros() > timeEnd + t0) ){
+    // set output to zero at beguining and end
+    rcDutySetpoint = (dutyStart);
+  } else if(micros() < timeSignal + t0){
+    // ramp
+    rcDutySetpoint =((micros()-timeStart-t0)*(dutyFinal - dutyStart)/(timeSignal-timeStart) + dutyStart);
+  } else{
+    rcPowerSetpoint = maxPowerSetpoint;
+  }
 }
 
 void step(){
