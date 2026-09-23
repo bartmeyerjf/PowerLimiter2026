@@ -18,13 +18,13 @@
 // [               IMPLEMENTATION (.c)                  ]
 // [====================================================]
 
-volatile uint32_t t0 = 8000000;
+volatile uint32_t t0 = 0;
 #define t1 8000000
 #define t2 8500000
 #define t3 4000000
-#define timeStart 8000000
-#define timeSignal 9000000
-#define timeEnd 15000000
+#define timeStart 10000000
+#define timeSignal 11000000
+#define timeEnd 16000000
 #define dutyStart 1336 // 8.16%
 #define dutyFinal 2128 // 12.98%
 #define maxPowerSetpoint 500 // max value for power setpoint in W
@@ -58,7 +58,6 @@ void rampOld(){
   } else{
     rcDutySetpoint =(dutyStart+(micros()-t1-t0)*(dutyFinal-dutyStart)/(t2-t1));
   }
-
 }
 
 
