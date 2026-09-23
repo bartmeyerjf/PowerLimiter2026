@@ -32,6 +32,7 @@ volatile uint16_t rcDutySetpoint = 0;  // remote controller duty setpoint in 16 
 volatile float rcPowerSetpoint = 0; // remote controller duty setpoint in Watts
 
 void taskModel();
+void rampDuty();
 void ramp();
 void step();
 float dutyValueToPercentage(uint32_t dutyValue);
