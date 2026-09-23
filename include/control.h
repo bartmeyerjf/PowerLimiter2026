@@ -24,8 +24,11 @@
 //const float Kp = 1.6;
 //const float Ki = 0.0873;
 
-const float Kp = 0.0015;
-const float Ki = 0.05;
+const float Kp = 0.002;
+const float Ki = 0.04;
+
+//const float Kp = 0.0015;
+//const float Ki = 0.05;
 
 volatile float power = 0; // power in Watts
 volatile float dutyControl = 0;
