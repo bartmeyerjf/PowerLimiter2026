@@ -44,7 +44,7 @@ void taskModel(){
   
   //step();
   ramp();
-  rcPowerSetpoint = maxPowerSetpoint*dutyValueToPercentage(rcDutySetpoint);
+  //rcPowerSetpoint = maxPowerSetpoint*dutyValueToPercentage(rcDutySetpoint);
 
 }
 
@@ -66,6 +66,7 @@ void ramp(){
   if((micros() < timeStart + t0) || (micros() > timeEnd + t0) ){
     // set output to zero at beguining and end
     rcDutySetpoint = (dutyStart);
+    rcPowerSetpoint = 0;
     dutyControl = dutyStart;
     updateControl = 0;
   } else if(micros() < timeSignal + t0){
