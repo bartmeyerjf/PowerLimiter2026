@@ -86,12 +86,12 @@ uint32_t timeStamp_0[BUFFER_SIZE];
 uint32_t timeStamp_1[BUFFER_SIZE];
 float rcPowerSetpoint_0[BUFFER_SIZE];
 float rcPowerSetpoint_1[BUFFER_SIZE];
-uint32_t dutyControl_0[BUFFER_SIZE];
-uint32_t dutyControl_1[BUFFER_SIZE];
-uint32_t dutyPI_0[BUFFER_SIZE];
-uint32_t dutyPI_1[BUFFER_SIZE];
-uint32_t dutyFF_0[BUFFER_SIZE];
-uint32_t dutyFF_1[BUFFER_SIZE];
+uint16_t dutyControl_0[BUFFER_SIZE];
+uint16_t dutyControl_1[BUFFER_SIZE];
+uint16_t dutyPI_0[BUFFER_SIZE];
+uint16_t dutyPI_1[BUFFER_SIZE];
+uint16_t dutyFF_0[BUFFER_SIZE];
+uint16_t dutyFF_1[BUFFER_SIZE];
 float power_0[BUFFER_SIZE];
 float power_1[BUFFER_SIZE];
 
@@ -107,16 +107,16 @@ void setupADC() {
 
   // Initialize buffers with zeros
   for (uint16_t i = 0; i < BUFFER_SIZE; i++) {
-    bufferA0_0[i] = 0;
-    bufferA0_1[i] = 0;
-    bufferA1_0[i] = 0;
-    bufferA1_1[i] = 0;
+    //bufferA0_0[i] = 0;
+    //bufferA0_1[i] = 0;
+    //bufferA1_0[i] = 0;
+    //bufferA1_1[i] = 0;
     timeStamp_0[i] = 0;
     timeStamp_1[i] = 0;
     rcPowerSetpoint_0[i] = 0;
     rcPowerSetpoint_1[i] = 0;
-    dutyControl_0[i] = 0;
-    dutyControl_1[i] = 0;
+    //dutyControl_0[i] = 0;
+    //dutyControl_1[i] = 0;
     dutyPI_0[i] = 0;
     dutyPI_1[i] = 0;
     dutyFF_0[i] = 0;
@@ -140,22 +140,22 @@ void adcContinuousRead() {
 
     // save in active buffer
   if (activeBuffer == 1) {
-    bufferA0_1[bufferIndex] = voltageReading;
-    bufferA1_1[bufferIndex] = currentReading;
+    //bufferA0_1[bufferIndex] = voltageReading;
+    //bufferA1_1[bufferIndex] = currentReading;
     timeStamp_1[bufferIndex] = micros();
     rcPowerSetpoint_1[bufferIndex] = rcPowerSetpoint;
     //dutyControl_1[bufferIndex] = (uint32_t)dutyControl;
-    dutyPI_1[bufferIndex] = (uint32_t)dutyPI;
-    dutyFF_1[bufferIndex] = (uint32_t)dutyFF;
+    dutyPI_1[bufferIndex] = (uint16_t)dutyPI;
+    dutyFF_1[bufferIndex] = (uint16_t)dutyFF;
     power_1[bufferIndex] = power;
   } else {
-    bufferA0_0[bufferIndex] = voltageReading;
-    bufferA1_0[bufferIndex] = currentReading;
+    //bufferA0_0[bufferIndex] = voltageReading;
+    //bufferA1_0[bufferIndex] = currentReading;
     timeStamp_0[bufferIndex] = micros();
     rcPowerSetpoint_0[bufferIndex] = rcPowerSetpoint;
     //dutyControl_0[bufferIndex] = (uint32_t)dutyControl;
-    dutyPI_0[bufferIndex] = (uint32_t)dutyPI;
-    dutyFF_0[bufferIndex] = (uint32_t)dutyFF;
+    dutyPI_0[bufferIndex] = (uint16_t)dutyPI;
+    dutyFF_0[bufferIndex] = (uint16_t)dutyFF;
     power_0[bufferIndex] = power;
   }
 

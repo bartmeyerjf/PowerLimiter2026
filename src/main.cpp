@@ -71,7 +71,7 @@ void loop() {
 
 // interrupt code
 void onTimer(){
-  setPWMOutput(dutyStart);
+  taskPWMOutput(dutyStart);
   //taskPWMOutput((uint16_t)dutyControl);
   updateControl = 1; // flag to tell program to update control effort value
   adcContinuousRead();
