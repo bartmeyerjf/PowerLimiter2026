@@ -46,13 +46,13 @@ void setupDataLog(){
 void taskDataLog(){
     if (isBufferReady) {
         // Pointer to the buffer that finished filling
-        //uint16_t* b0                = (activeBuffer == 1)? bufferA0_1       : bufferA0_0;
-        //uint16_t* b1                = (activeBuffer == 1)? bufferA1_1       : bufferA1_0;
+        //uint16_t* b0              = (activeBuffer == 1)? bufferA0_1       : bufferA0_0;
+        //uint16_t* b1              = (activeBuffer == 1)? bufferA1_1       : bufferA1_0;
         uint32_t* timeStamp         = (activeBuffer == 1)? timeStamp_1      : timeStamp_0;
-        float* rcPowerSetpointLog = (activeBuffer == 1)? rcPowerSetpoint_1 : rcPowerSetpoint_0;
-        //uint32_t* dutyControlLog    = (activeBuffer == 1)? dutyControl_1    : dutyControl_0;
-        uint16_t* dutyPILog         = (activeBuffer == 1)? dutyPI_1         : dutyPI_0;
-        uint16_t* dutyFFLog         = (activeBuffer == 1)? dutyFF_1         : dutyFF_0;
+        float* rcPowerSetpointLog   = (activeBuffer == 1)? rcPowerSetpoint_1 : rcPowerSetpoint_0;
+        //uint32_t* dutyControlLog  = (activeBuffer == 1)? dutyControl_1    : dutyControl_0;
+        float* dutyPILog            = (activeBuffer == 1)? dutyPI_1         : dutyPI_0;
+        float* dutyFFLog            = (activeBuffer == 1)? dutyFF_1         : dutyFF_0;
         float* powerLog             = (activeBuffer == 1)? power_1          : power_0;
 
 
