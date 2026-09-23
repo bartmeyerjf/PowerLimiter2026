@@ -67,8 +67,6 @@ void ramp(){
     // set output to zero at beguining and end
     rcDutySetpoint = (dutyStart);
     rcPowerSetpoint = 0;
-    dutyControl = dutyStart;
-    updateControl = 0;
   } else if(micros() < timeSignal + t0){
     // ramp
     rcPowerSetpoint =((micros()-timeStart-t0)*(maxPowerSetpoint)/(timeSignal-timeStart));
