@@ -62,16 +62,16 @@ void setup() {
 void loop() {
   //taskPWMIn();
   taskDataLog();
-  taskModel();
   taskADC();
+  taskModel();
   taskControl();
-  //taskPWMOutput((uint32_t)rcDutySetpoint);
+  //taskPWMOutput((uint16_t)rcDutySetpoint);
 
 }
 
 // interrupt code
 void onTimer(){
-  taskPWMOutput((uint32_t)dutyControl);
+  taskPWMOutput((uint16_t)dutyControl);
   updateControl = 1; // flag to tell program to update control effort value
   adcContinuousRead();
 } 
