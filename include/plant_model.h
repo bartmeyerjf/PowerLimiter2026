@@ -94,9 +94,9 @@ void step(){
     //rcDutySetpoint = (dutyStart);
     rcDutySetpoint = dutyStart;
   } else if(micros() < timeSignal + t0){
-    rcDutySetpoint = (dutyStart + (dutyFinal-dutyStart)*3/4);
+    rcDutySetpoint = (dutyStart + (dutyFinal-dutyStart)*9/10);
   } else{
-    rcDutySetpoint = (dutyStart + (dutyFinal-dutyStart)*3/4);
+    rcDutySetpoint = (dutyStart + (dutyFinal-dutyStart)*9/10);
   }
 }
 
