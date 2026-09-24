@@ -24,8 +24,8 @@
 //const float Kp = 1.6;
 //const float Ki = 0.0873;
 
-const float Kp = 0.002;
-const float Ki = 0.04;
+const float Kp = 0.0025;
+const float Ki = 0.035;
 
 //const float Kp = 0.0015;
 //const float Ki = 0.05;
@@ -106,9 +106,9 @@ void updateDutyControl(){
     updateDutyFF();
     updateDutyPI();
     // Combines feedforward and PI control
-    dutyControl = dutyPercentageToValue(dutyFF);
+    //dutyControl = dutyPercentageToValue(dutyFF);
     //dutyControl = dutyPercentageToValue(dutyFF + dutyPI);
-    //dutyControl = dutyPercentageToValue(dutyPI);
+    dutyControl = dutyPercentageToValue(dutyPI);
 
     // Locks duty control output within min and max range
     if (dutyControl > outMax) {
