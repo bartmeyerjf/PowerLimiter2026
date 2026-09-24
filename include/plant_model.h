@@ -44,7 +44,7 @@ void taskModel(){
   }
   
   //step();
-  rampDuty();
+  ramp();
   //rcPowerSetpoint = maxPowerSetpoint*dutyValueToPercentage(rcDutySetpoint);
 
 }
