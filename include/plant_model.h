@@ -23,8 +23,8 @@ volatile uint32_t t0 = 0;
 #define t2 8500000
 #define t3 4000000
 #define timeStart 10000000
-#define timeSignal 14000000
-#define timeEnd 20000000
+#define timeSignal 20000000
+#define timeEnd 30000000
 #define dutyStart 1336 // 8.16%
 #define dutyFinal 2128 // 12.98%
 #define maxPowerSetpoint 500 // max value for power setpoint in W
@@ -43,8 +43,8 @@ void taskModel(){
     t0 = micros();
   }
   
-  //step();
-  ramp();
+  step();
+  //ramp();
   //rcPowerSetpoint = maxPowerSetpoint*dutyValueToPercentage(rcDutySetpoint);
 
 }
@@ -87,7 +87,20 @@ void rampDuty(){
   }
 }
 
+
 void step(){
+  if((micros() < timeStart + t0) || (micros() > timeEnd + t0) ){
+    // set output to zero at beguining and end
+    //rcDutySetpoint = (dutyStart);
+    rcDutySetpoint = dutyStart;
+  } else if(micros() < timeSignal + t0){
+    rcDutySetpoint = (dutyStart + (dutyFinal-dutyStart)/4);
+  } else{
+    rcDutySetpoint = (dutyStart + (dutyFinal-dutyStart)*3/4);
+  }
+}
+
+void stepOld(){
   if(micros() > 3*t3 + t1 + t0){
     rcDutySetpoint = (dutyStart);
   } else if(micros() > 2*t3 + t1 + t0){
