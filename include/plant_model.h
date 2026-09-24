@@ -24,7 +24,7 @@ volatile uint32_t t0 = 0;
 #define t3 4000000
 #define timeStart 10000000
 #define timeSignal 20000000
-#define timeEnd 30000000
+#define timeEnd 25000000
 #define dutyStart 1336 // 8.16%
 #define dutyFinal 2128 // 12.98%
 #define maxPowerSetpoint 500 // max value for power setpoint in W
@@ -94,7 +94,7 @@ void step(){
     //rcDutySetpoint = (dutyStart);
     rcDutySetpoint = dutyStart;
   } else if(micros() < timeSignal + t0){
-    rcDutySetpoint = (dutyStart + (dutyFinal-dutyStart)/4);
+    rcDutySetpoint = (dutyStart + (dutyFinal-dutyStart)*3/4);
   } else{
     rcDutySetpoint = (dutyStart + (dutyFinal-dutyStart)*3/4);
   }
