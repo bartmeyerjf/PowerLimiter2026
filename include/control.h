@@ -44,10 +44,15 @@ void updateError();
 void updateDutyPI();
 
 volatile float dutyFF = 0;
-const float ALPHA =  0.0984e-06f;
-const float BETA  = -0.0869e-03f;
-const float GAMMA =  0.0034e+00f;
-const float DELTA = -0.0030e+03f;
+const float ALPHA =  0.0702e-06f;
+const float BETA  = -0.0860e-03f;
+const float GAMMA =  0.0049e+00f;
+const float DELTA = -0.0017e+03f;
+
+//const float ALPHA =  0.0984e-06f;
+//const float BETA  = -0.0869e-03f;
+//const float GAMMA =  0.0034e+00f;
+//const float DELTA = -0.0030e+03f;
 
 //const float ALPHA =  3.8786e-06f;
 //const float BETA  = -3.4152e-03f;
