@@ -102,31 +102,33 @@ void updateDutyPI(){
 // Determine control duty cycle
 void updateDutyControl(){
     // update feedforward and PI control
-    updateDutyFF();
+    //updateDutyFF();
     updateDutyPI();
     // Combines feedforward and PI control
     //dutyControl = dutyPercentageToValue(dutyFF);
     //dutyControl = dutyPercentageToValue(dutyFF + dutyPI);
-    dutyControl = (dutyPI);
+    dutyControl = dutyPercentageToValue(dutyPI);
 
+    /*
     // Locks duty control output within min and max range
     if (dutyControl > outMax) {
         dutyControl = outMax;
     } else if (dutyControl < outMin) {
         dutyControl = outMin;
     }
+    */
 } 
 
 void taskControl(){
     if (updateControl) {
         updateDutyControl();
-        updateControl = 0; // flag to tell program control effort value has been updated
     }
     
     if((micros() < timeStart + t0) || (micros() > timeEnd + t0)){
-    dutyControl = 0;
-    updateControl = 0;
+        dutyControl = dutyPercentageToValue(0);
     }
+    
+    updateControl = 0; // flag to tell program control effort value has been updated
 
 }
 

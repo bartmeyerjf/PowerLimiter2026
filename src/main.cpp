@@ -66,7 +66,7 @@ void loop() {
   taskModel();
   taskControl();
   //taskPWMOutput(rcDutySetpoint);
-  taskPWMOutput(dutyPercentageToValue(dutyControl));
+  taskPWMOutput((dutyControl));
 }
 
 // interrupt code
