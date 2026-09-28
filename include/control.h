@@ -23,11 +23,11 @@
 //const float Kp = 735e-06f;
 //const float Ki = 47e-3f;
 
-//const float Kp = 1.6;
-//const float Ki = 0.0873;
-
-const float Kp = 0.001;
+const float Kp = 0.002;
 const float Ki = 0.002;
+
+//const float Kp = 0.001;
+//const float Ki = 0.002;
 
 //const float Kp = 0.0015;
 //const float Ki = 0.05;
@@ -127,7 +127,7 @@ void taskControl(){
     if((micros() < timeStart + t0) || (micros() > timeEnd + t0)){
         dutyControl = dutyPercentageToValue(0);
     }
-    
+
     updateControl = 0; // flag to tell program control effort value has been updated
 
 }
