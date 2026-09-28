@@ -128,7 +128,7 @@ void taskControl(){
 
     
     if((micros() < timeStart + t0) || (micros() > timeEnd + t0)){
-    dutyControl = dutyStart;
+    dutyControl = 0;
     updateControl = 0;
     }
 
