@@ -16,8 +16,10 @@
 // #define tau 200000 // x10e-6 s = 200 ms (aproximately)
 
 #define dt 0.01 // time in seconds (10 ms)
-#define outMin 1336
-#define outMax 2128
+//#define outMin 1336
+//#define outMax 2128
+#define outMin 0
+#define outMax 1
 //const float Kp = 735e-06f;
 //const float Ki = 47e-3f;
 
