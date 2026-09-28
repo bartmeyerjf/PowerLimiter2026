@@ -70,7 +70,8 @@ void updateDutyFF(){
     dutyFF = ((ALPHA * rcPowerSetpoint + BETA) * rcPowerSetpoint + GAMMA) * rcPowerSetpoint + DELTA;
 } 
 
-void updateError(){
+// Determine PI duty cycle
+void updateDutyPI(){
     error = rcPowerSetpoint - power;
     // Anti-Windup (Clamping) and Output Saturation
     if (dutyPI > outMax) {
@@ -79,7 +80,7 @@ void updateError(){
         // Only allow the integral to update if the error is negative
         // (which will help pull the output back down below the max limit)
         if (error < 0.0f) {
-            errorIntegral = errorIntegral + error*dt;;
+            errorIntegral = errorIntegral + error*dt;
         }
     } 
     else if (dutyPI < outMin) {
@@ -87,20 +88,15 @@ void updateError(){
         // Only allow the integral to update if the error is positive
         // (which will help pull the output back up above the min limit)
         if (error > 0.0f) {
-            errorIntegral = errorIntegral + error*dt;;
+            errorIntegral = errorIntegral + error*dt;
         }
     } 
     else {
         // Output is within bounds; proceed with normal integration
-        errorIntegral = errorIntegral + error*dt;;
+        errorIntegral = errorIntegral + error*dt;
+        dutyPI = Kp*error + Ki*errorIntegral;
     }
 }
-
-// Determine PI duty cycle
-void updateDutyPI(){
-    updateError();
-    dutyPI = Kp*error + Ki*errorIntegral;
-} 
 
 // Determine control duty cycle
 void updateDutyControl(){
@@ -110,7 +106,7 @@ void updateDutyControl(){
     // Combines feedforward and PI control
     //dutyControl = dutyPercentageToValue(dutyFF);
     //dutyControl = dutyPercentageToValue(dutyFF + dutyPI);
-    dutyControl = (dutyFF + dutyPI);
+    dutyControl = (dutyPI);
 
     // Locks duty control output within min and max range
     if (dutyControl > outMax) {
