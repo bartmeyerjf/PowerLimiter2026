@@ -38,6 +38,7 @@ volatile float dutyControl = 0;
 volatile float dutyPI = 0;
 volatile float error = 0;
 volatile float errorIntegral = 0;
+volatile float auxDutyPI;
 // volatile float errorPrevious = 0;
 
 void taskControl();
@@ -74,16 +75,16 @@ void updateDutyFF(){
 void updateDutyPI(){
     error = rcPowerSetpoint - power;
     // Anti-Windup (Clamping) and Output Saturation
-    if (dutyPI > outMax) {
+    float auxDutyPI = Kp*error + Ki*(errorIntegral + error*dt);
+    if (auxDutyPI > outMax) {
         dutyPI = outMax;
-        
         // Only allow the integral to update if the error is negative
         // (which will help pull the output back down below the max limit)
         if (error < 0.0f) {
             errorIntegral = errorIntegral + error*dt;
         }
     } 
-    else if (dutyPI < outMin) {
+    else if (auxDutyPI < outMin) {
         dutyPI = outMin;
         // Only allow the integral to update if the error is positive
         // (which will help pull the output back up above the min limit)
