@@ -24,8 +24,8 @@
 //const float Kp = 1.6;
 //const float Ki = 0.0873;
 
-const float Kp = 0.0025;
-const float Ki = 0.035;
+const float Kp = 0.001;
+const float Ki = 0.002;
 
 //const float Kp = 0.0015;
 //const float Ki = 0.05;
