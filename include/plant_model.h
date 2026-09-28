@@ -44,8 +44,8 @@ void taskModel(){
   }
   
   //step();
-  //ramp();
-  rampDuty();
+  ramp();
+  //rampDuty();
 }
 
 void rampOld(){
