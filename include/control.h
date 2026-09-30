@@ -47,10 +47,10 @@ void updateError();
 void updateDutyPI();
 
 volatile float dutyFF = 0;
-const float ALPHA =  0.0702e-06f;
-const float BETA  = -0.0860e-03f;
-const float GAMMA =  0.0049e+00f;
-const float DELTA = -0.0017e+03f;
+const float ALPHA =  0.0524e-06f;
+const float BETA  = -0.0600e-03f;
+const float GAMMA =  0.0036e+00f;
+const float DELTA = -0.0011e+03f;
 
 //const float ALPHA =  0.0984e-06f;
 //const float BETA  = -0.0869e-03f;
@@ -69,6 +69,11 @@ void updateDutyFF(){
     // Horner's Method for fast polynomial calculation:
     // u = ((ALPHA * P + BETA) * P + GAMMA) * P + DELTA
     dutyFF = ((ALPHA * rcPowerSetpoint + BETA) * rcPowerSetpoint + GAMMA) * rcPowerSetpoint + DELTA;
+    if (dutyFF > outMax) {
+        dutyFF = outMax;
+    } else if (dutyFF < outMin) {
+        dutyFF = outMin;
+    }
 } 
 
 // Determine PI duty cycle

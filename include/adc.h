@@ -113,8 +113,8 @@ void setupADC() {
     //bufferA1_1[i] = 0;
     timeStamp_0[i] = 0;
     timeStamp_1[i] = 0;
-    rcPowerSetpoint_0[i] = 0;
-    rcPowerSetpoint_1[i] = 0;
+    //rcPowerSetpoint_0[i] = 0;
+    //rcPowerSetpoint_1[i] = 0;
     //dutyControl_0[i] = 0;
     //dutyControl_1[i] = 0;
     dutyPI_0[i] = 0;
@@ -143,7 +143,7 @@ void adcContinuousRead() {
     //bufferA0_1[bufferIndex] = voltageReading;
     //bufferA1_1[bufferIndex] = currentReading;
     timeStamp_1[bufferIndex] = micros();
-    rcPowerSetpoint_1[bufferIndex] = rcPowerSetpoint;
+    //rcPowerSetpoint_1[bufferIndex] = rcPowerSetpoint;
     //dutyControl_1[bufferIndex] = (uint32_t)dutyControl;
     dutyPI_1[bufferIndex] = dutyPI;
     dutyFF_1[bufferIndex] = dutyFF;
@@ -152,7 +152,7 @@ void adcContinuousRead() {
     //bufferA0_0[bufferIndex] = voltageReading;
     //bufferA1_0[bufferIndex] = currentReading;
     timeStamp_0[bufferIndex] = micros();
-    rcPowerSetpoint_0[bufferIndex] = rcPowerSetpoint;
+    //rcPowerSetpoint_0[bufferIndex] = rcPowerSetpoint;
     //dutyControl_0[bufferIndex] = (uint32_t)dutyControl;
     dutyPI_0[bufferIndex] = dutyPI;
     dutyFF_0[bufferIndex] = dutyFF;
