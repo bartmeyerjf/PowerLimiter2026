@@ -107,12 +107,14 @@ void updateDutyPI(){
 // Determine control duty cycle
 void updateDutyControl(){
     // update feedforward and PI control
-    //updateDutyFF();
+    updateDutyFF();
     updateDutyPI();
-    // Combines feedforward and PI control
-    //dutyControl = dutyPercentageToValue(dutyFF);
-    //dutyControl = dutyPercentageToValue(dutyFF + dutyPI);
-    dutyControl = dutyPercentageToValue(dutyPI);
+
+    // Combines feedforward and PI control:
+    // Weslei selecione uma das 3 opções:  
+    //dutyControl = dutyPercentageToValue(dutyFF); // apenas Feedforward
+    //dutyControl = dutyPercentageToValue(0.5*dutyFF + 0.5*dutyPI); // ambos
+    dutyControl = dutyPercentageToValue(dutyPI); // apenas PI
 
     /*
     // Locks duty control output within min and max range
