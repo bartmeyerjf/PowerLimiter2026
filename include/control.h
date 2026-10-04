@@ -108,7 +108,7 @@ void updateDutyControl(){
 
     // Combines feedforward and PI control:
     //dutyControl = (dutyFF); // apenas Feedforward
-    dutyControl = (0.5*dutyFF + 0.5*dutyPI); // ambos
+    dutyControl = (0.8*dutyFF + 0.2*dutyPI); // ambos
     //dutyControl = (dutyPI); // apenas PI
 
     if (dutyControl > outMax) {
@@ -134,7 +134,7 @@ void taskControl(){
     }
     
     if((micros() < timeStart + t0) || (micros() > timeEnd + t0)){
-        dutyControl = dutyPercentageToValue(0);
+        dutyControl = 0;
     }
 
     updateControl = 0; // flag to tell program control effort value has been updated
