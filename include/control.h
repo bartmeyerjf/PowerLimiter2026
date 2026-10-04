@@ -23,11 +23,11 @@
 //const float Kp = 735e-06f;
 //const float Ki = 47e-3f;
 
-const float Kp = 0.0005;
-const float Ki = 0.0018;
+const float Kp = 0.001;
+const float Ki = 0.0022;
 
-//const float Kp = 0.001;
-//const float Ki = 0.002;
+//const float Kp = 0.0005;
+//const float Ki = 0.0018;
 
 //const float Kp = 0.0015;
 //const float Ki = 0.05;
@@ -66,13 +66,8 @@ volatile bool updateControl = 0;
 // Determine Feed Forward duty cycle
 void updateDutyFF(){
     // Horner's Method for fast polynomial calculation:
-    // u = ((ALPHA * P + BETA) * P + GAMMA) * P + DELTA
+    // u = (ALPHA * P + BETA) * P + GAMMA
     dutyFF = ((ALPHA * rcPowerSetpoint + BETA) * rcPowerSetpoint + GAMMA);
-    if (dutyFF > outMax) {
-        dutyFF = outMax;
-    } else if (dutyFF < outMin) {
-        dutyFF = outMin;
-    }
 } 
 
 // Determine PI duty cycle
@@ -81,7 +76,7 @@ void updateDutyPI(){
     // Anti-Windup (Clamping) and Output Saturation
     float auxDutyPI = Kp*error + Ki*(errorIntegral + error*dt);
     if (auxDutyPI > outMax) {
-        dutyPI = outMax;
+        //dutyPI = outMax;
         // Only allow the integral to update if the error is negative
         // (which will help pull the output back down below the max limit)
         if (error < 0.0f) {
@@ -89,7 +84,7 @@ void updateDutyPI(){
         }
     } 
     else if (auxDutyPI < outMin) {
-        dutyPI = outMin;
+        //dutyPI = outMin;
         // Only allow the integral to update if the error is positive
         // (which will help pull the output back up above the min limit)
         if (error > 0.0f) {
@@ -113,6 +108,12 @@ void updateDutyControl(){
     dutyControl = dutyPercentageToValue(dutyFF); // apenas Feedforward
     //dutyControl = dutyPercentageToValue(0.5*dutyFF + 0.5*dutyPI); // ambos
     //dutyControl = dutyPercentageToValue(dutyPI); // apenas PI
+
+    if (dutyControl > outMax) {
+        dutyControl = outMax;
+    } else if (dutyControl < outMin) {
+        dutyControl = outMin;
+    }
 
     
     /*
