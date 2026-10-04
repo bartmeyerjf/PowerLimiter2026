@@ -23,8 +23,8 @@
 //const float Kp = 735e-06f;
 //const float Ki = 47e-3f;
 
-const float Kp = 0.001;
-const float Ki = 0.0022;
+const float Kp = 0.0005;
+const float Ki = 0.0018;
 
 //const float Kp = 0.001;
 //const float Ki = 0.002;
@@ -47,10 +47,9 @@ void updateError();
 void updateDutyPI();
 
 volatile float dutyFF = 0;
-const float ALPHA =  0.0524e-06f;
-const float BETA  = -0.0600e-03f;
-const float GAMMA =  0.0036e+00f;
-const float DELTA = -0.0011e+03f;
+const float ALPHA =  -1.1742e-06f;
+const float BETA  =   2.3761e-03f;
+const float GAMMA =  -0.0225e+00f;
 
 //const float ALPHA =  0.0984e-06f;
 //const float BETA  = -0.0869e-03f;
@@ -68,7 +67,7 @@ volatile bool updateControl = 0;
 void updateDutyFF(){
     // Horner's Method for fast polynomial calculation:
     // u = ((ALPHA * P + BETA) * P + GAMMA) * P + DELTA
-    dutyFF = ((ALPHA * rcPowerSetpoint + BETA) * rcPowerSetpoint + GAMMA) * rcPowerSetpoint + DELTA;
+    dutyFF = ((ALPHA * rcPowerSetpoint + BETA) * rcPowerSetpoint + GAMMA);
     if (dutyFF > outMax) {
         dutyFF = outMax;
     } else if (dutyFF < outMin) {
@@ -111,11 +110,9 @@ void updateDutyControl(){
     updateDutyPI();
 
     // Combines feedforward and PI control:
-    // Weslei selecione uma das 3 opções:  
-    //dutyControl = dutyPercentageToValue(dutyFF); // apenas Feedforward
+    dutyControl = dutyPercentageToValue(dutyFF); // apenas Feedforward
     //dutyControl = dutyPercentageToValue(0.5*dutyFF + 0.5*dutyPI); // ambos
-    dutyControl = dutyPercentageToValue(dutyPI); // apenas PI
-
+    //dutyControl = dutyPercentageToValue(dutyPI); // apenas PI
 
     
     /*
