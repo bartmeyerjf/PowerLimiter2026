@@ -107,9 +107,9 @@ void updateDutyControl(){
     updateDutyPI();
 
     // Combines feedforward and PI control:
-    //dutyControl = dutyPercentageToValue(dutyFF); // apenas Feedforward
-    dutyControl = dutyPercentageToValue(0.5*dutyFF + 0.5*dutyPI); // ambos
-    //dutyControl = dutyPercentageToValue(dutyPI); // apenas PI
+    //dutyControl = (dutyFF); // apenas Feedforward
+    dutyControl = (0.5*dutyFF + 0.5*dutyPI); // ambos
+    //dutyControl = (dutyPI); // apenas PI
 
     if (dutyControl > outMax) {
         dutyControl = outMax;
