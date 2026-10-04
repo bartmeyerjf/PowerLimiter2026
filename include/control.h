@@ -116,6 +116,8 @@ void updateDutyControl(){
     //dutyControl = dutyPercentageToValue(0.5*dutyFF + 0.5*dutyPI); // ambos
     dutyControl = dutyPercentageToValue(dutyPI); // apenas PI
 
+
+    
     /*
     // Locks duty control output within min and max range
     if (dutyControl > outMax) {
