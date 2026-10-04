@@ -82,6 +82,7 @@ void updateDutyPI(){
         if (error < 0.0f) {
             errorIntegral = errorIntegral + error*dt;
         }
+        dutyPI = Kp*error + Ki*errorIntegral;
     } 
     else if (auxDutyPI < outMin) {
         //dutyPI = outMin;
@@ -90,6 +91,7 @@ void updateDutyPI(){
         if (error > 0.0f) {
             errorIntegral = errorIntegral + error*dt;
         }
+        dutyPI = Kp*error + Ki*errorIntegral;
     } 
     else {
         // Output is within bounds; proceed with normal integration
@@ -105,8 +107,8 @@ void updateDutyControl(){
     updateDutyPI();
 
     // Combines feedforward and PI control:
-    dutyControl = dutyPercentageToValue(dutyFF); // apenas Feedforward
-    //dutyControl = dutyPercentageToValue(0.5*dutyFF + 0.5*dutyPI); // ambos
+    //dutyControl = dutyPercentageToValue(dutyFF); // apenas Feedforward
+    dutyControl = dutyPercentageToValue(0.5*dutyFF + 0.5*dutyPI); // ambos
     //dutyControl = dutyPercentageToValue(dutyPI); // apenas PI
 
     if (dutyControl > outMax) {
